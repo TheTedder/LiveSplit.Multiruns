@@ -13,12 +13,12 @@ namespace LiveSplit.Multiruns
 {
     class MultirunsComponent : LogicComponent
     {
-        public MRSettings Settings;
+        public MultirunsSettings Settings;
         private LiveSplitState state;
 
         public MultirunsComponent(LiveSplitState state)
         {
-            Settings = new MRSettings();
+            Settings = new MultirunsSettings();
         }
 
         public override string ComponentName => "Multiruns";

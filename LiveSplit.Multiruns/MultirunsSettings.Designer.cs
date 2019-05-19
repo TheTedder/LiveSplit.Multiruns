@@ -1,6 +1,6 @@
 ﻿namespace LiveSplit.Multiruns
 {
-    partial class MRSettings
+    partial class MultirunsSettings
     {
         /// <summary> 
         /// Required designer variable.

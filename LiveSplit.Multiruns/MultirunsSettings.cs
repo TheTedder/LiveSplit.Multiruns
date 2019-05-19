@@ -10,10 +10,10 @@ using System.Windows.Forms;
 
 namespace LiveSplit.Multiruns
 {
-    public partial class MRSettings : UserControl
+    public partial class MultirunsSettings : UserControl
     {
         public bool enabled;
-        public MRSettings()
+        public MultirunsSettings()
         {
             InitializeComponent();
             chkEnable.DataBindings.Add(nameof(chkEnable.Checked), this, nameof(enabled),false,DataSourceUpdateMode.OnPropertyChanged);

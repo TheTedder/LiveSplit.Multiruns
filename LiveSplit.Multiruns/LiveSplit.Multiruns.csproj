@@ -50,17 +50,18 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="MultirunsComponent.cs" />
+    <Compile Include="MultirunsFactory.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="MRSettings.cs">
+    <Compile Include="MultirunsSettings.cs">
       <SubType>UserControl</SubType>
     </Compile>
-    <Compile Include="MRSettings.Designer.cs">
-      <DependentUpon>MRSettings.cs</DependentUpon>
+    <Compile Include="MultirunsSettings.Designer.cs">
+      <DependentUpon>MultirunsSettings.cs</DependentUpon>
     </Compile>
   </ItemGroup>
   <ItemGroup>
-    <EmbeddedResource Include="MRSettings.resx">
-      <DependentUpon>MRSettings.cs</DependentUpon>
+    <EmbeddedResource Include="MultirunsSettings.resx">
+      <DependentUpon>MultirunsSettings.cs</DependentUpon>
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
