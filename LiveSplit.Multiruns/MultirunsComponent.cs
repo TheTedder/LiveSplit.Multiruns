@@ -16,7 +16,6 @@ namespace LiveSplit.Multiruns
     {
         public MultirunsSettings Settings;
         private readonly LiveSplitState State;
-        private readonly string FirstGame;
         private string OriginalGame;
 
         public MultirunsComponent(LiveSplitState s)
@@ -28,8 +27,7 @@ namespace LiveSplit.Multiruns
             State.OnReset += Reset;
             try
             {
-                FirstGame = (from ISegment split in State.Run where !split.Name.Substring(0, 1).Equals("-") select split.Name).First();
-                State.Run.GameName = FirstGame;
+                State.Run.GameName = FindNextSplit();
             }
             catch (InvalidOperationException yourMom)
             {
@@ -37,11 +35,35 @@ namespace LiveSplit.Multiruns
             }
         }
 
+        public string FindNextSplit()
+        {
+            IEnumerable<ISegment> splits;
+
+            switch (State.CurrentPhase)
+            {
+                case TimerPhase.Ended:
+                case TimerPhase.NotRunning:
+                    splits = State.Run.AsEnumerable();
+                    break;
+
+                case TimerPhase.Paused:
+                case TimerPhase.Running:
+                    splits = new ISegment[State.Run.Count() - State.CurrentSplitIndex];
+                    State.Run.ToArray().CopyTo((Array) splits, State.CurrentSplitIndex);
+                    break;
+
+                default:
+                    splits = Array.Empty<ISegment>();
+                    break;
+            }
+            return (from ISegment split in splits where !split.Name.Substring(0, 1).Equals("-") select split.Name).First();
+        }
+
         private void Reset(object sender, TimerPhase value)
         {
-            if (Settings.On && !string.IsNullOrEmpty(FirstGame))
+            if (Settings.On && !string.IsNullOrEmpty(FindNextSplit()))
             {
-                State.Run.GameName = FirstGame;
+                State.Run.GameName = FindNextSplit();
             }
         }
 
@@ -49,15 +71,17 @@ namespace LiveSplit.Multiruns
         {
             if (Settings.On)
             {
-                //don't do anything if this is a subsplit
-                if (!State.CurrentSplit.Name.Substring(0, 1).Equals("-"))
-                {
-                    State.Run.GameName = State.CurrentSplit.Name;
-                }
-
                 if(State.CurrentPhase == TimerPhase.Ended)
                 {
                     State.Run.GameName = OriginalGame;
+                }
+                else
+                {
+                    string game = FindNextSplit();
+                    if (!game.Equals(State.Run.GameName))
+                    {
+                        State.Run.GameName = game;
+                    }
                 }
             }
         }
