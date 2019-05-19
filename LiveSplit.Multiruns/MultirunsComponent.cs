@@ -23,8 +23,7 @@ namespace LiveSplit.Multiruns
             State = s;
             Settings = new MultirunsSettings();
             OriginalGame = State.Run.GameName;
-            State.OnSplit += Change;
-            State.OnReset += Reset;
+            
             try
             {
                 State.Run.GameName = FindNextSplit();
@@ -33,6 +32,11 @@ namespace LiveSplit.Multiruns
             {
                 Debug.WriteLine(yourMom.Message);
             }
+
+            State.OnSplit += Change;
+            State.OnSkipSplit += Change;
+            State.OnUndoSplit += Change;
+            State.OnReset += Reset;
         }
 
         public string FindNextSplit()
@@ -93,6 +97,8 @@ namespace LiveSplit.Multiruns
         public override void Dispose()
         {
             State.OnSplit -= Change;
+            State.OnSkipSplit -= Change;
+            State.OnUndoSplit -= Change;
             State.OnReset -= Reset;
         }
 
