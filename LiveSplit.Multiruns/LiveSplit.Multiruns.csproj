@@ -30,6 +30,9 @@
     <ErrorReport>prompt</ErrorReport>
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
+  <PropertyGroup>
+    <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiveSplit.Core">
       <HintPath>E:\dambu\Documents\LiveSplit_1.7.6\LiveSplit.Core.dll</HintPath>
@@ -65,4 +68,7 @@
     </EmbeddedResource>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
+  <PropertyGroup>
+    <PostBuildEvent>copy $(TargetPath) E:\dambu\Documents\LiveSplit_1.7.6\Components</PostBuildEvent>
+  </PropertyGroup>
 </Project>
