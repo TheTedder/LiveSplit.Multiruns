@@ -37,25 +37,26 @@ namespace LiveSplit.Multiruns
 
         public string FindNextSplit()
         {
-            IEnumerable<ISegment> splits;
+            ISegment[] splits;
 
             switch (State.CurrentPhase)
             {
                 case TimerPhase.Ended:
                 case TimerPhase.NotRunning:
-                    splits = State.Run.AsEnumerable();
+                    splits = State.Run.ToArray();
                     break;
 
                 case TimerPhase.Paused:
                 case TimerPhase.Running:
                     splits = new ISegment[State.Run.Count() - State.CurrentSplitIndex];
-                    State.Run.ToArray().CopyTo((Array) splits, State.CurrentSplitIndex);
+                    Array.Copy(State.Run.ToArray(), State.CurrentSplitIndex, splits, 0, splits.Length);
                     break;
 
                 default:
                     splits = Array.Empty<ISegment>();
                     break;
             }
+
             return (from ISegment split in splits where !split.Name.Substring(0, 1).Equals("-") select split.Name).First();
         }
 
@@ -78,6 +79,7 @@ namespace LiveSplit.Multiruns
                 else
                 {
                     string game = FindNextSplit();
+                    Debug.WriteLine("Found " + game);
                     if (!game.Equals(State.Run.GameName))
                     {
                         State.Run.GameName = game;
