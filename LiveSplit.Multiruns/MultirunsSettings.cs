@@ -7,12 +7,14 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
+using LiveSplit.UI.Components;
 
 namespace LiveSplit.Multiruns
 {
     public partial class MultirunsSettings : UserControl
     {
-        public bool On { get; set;}
+        public bool On { get; set; }
+
         public MultirunsSettings()
         {
             InitializeComponent();
