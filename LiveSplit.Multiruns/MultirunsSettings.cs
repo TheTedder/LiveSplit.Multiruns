@@ -12,11 +12,12 @@ namespace LiveSplit.Multiruns
 {
     public partial class MultirunsSettings : UserControl
     {
-        public bool on;
+        public bool On { get; set;}
         public MultirunsSettings()
         {
             InitializeComponent();
-            chkEnable.DataBindings.Add(nameof(chkEnable.Checked), this, nameof(this.on),false,DataSourceUpdateMode.OnPropertyChanged);
+            chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On),false,DataSourceUpdateMode.OnPropertyChanged);
+            On = true;
         }
     }
 }

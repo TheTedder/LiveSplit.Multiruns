@@ -53,12 +53,12 @@
             this.panel1.Size = new System.Drawing.Size(143, 143);
             this.panel1.TabIndex = 1;
             // 
-            // MRSettings
+            // MultirunsSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(this.panel1);
-            this.Name = "MRSettings";
+            this.Name = "MultirunsSettings";
             this.panel1.ResumeLayout(false);
             this.panel1.PerformLayout();
             this.ResumeLayout(false);
