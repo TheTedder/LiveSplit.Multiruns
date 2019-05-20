@@ -14,7 +14,6 @@ namespace LiveSplit.Multiruns
     public partial class MultirunsSettings : UserControl
     {
         public bool On { get; set; }
-        public string GameName { get; set; }
 
         public MultirunsSettings()
         {
