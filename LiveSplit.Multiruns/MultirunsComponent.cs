@@ -31,7 +31,7 @@ namespace LiveSplit.Multiruns
 
         private void State_OnSplit(object sender, EventArgs e)
         {
-            if (State.CurrentPhase == TimerPhase.Ended)
+            if (State.CurrentPhase == TimerPhase.Ended && Settings.On)
             {
                 var runfact = new XMLRunFactory(Settings.Open(),Settings.NextFile);
                 var compgenfact = new StandardComparisonGeneratorsFactory();
