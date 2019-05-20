@@ -14,14 +14,31 @@ namespace LiveSplit.Multiruns
     public partial class MultirunsSettings : UserControl
     {
         public bool On { get; set; }
+        public string NextFile { get; set; }
 
         public MultirunsSettings()
         {
             InitializeComponent();
 
             chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
-            
+            tbSplitsFile.DataBindings.Add(nameof(TextBox.Text), this, nameof(NextFile), false, DataSourceUpdateMode.OnPropertyChanged);
+            btnSelect.Click += BtnSelect_Click;
+            diaSplitsFile.FileOk += DiaSplitsFile_FileOk;
+
             On = true;
+        }
+
+        private void DiaSplitsFile_FileOk(object sender, CancelEventArgs e)
+        {
+            if (!e.Cancel)
+            {
+                tbSplitsFile.Text = diaSplitsFile.FileName;
+            }
+        }
+
+        private void BtnSelect_Click(object sender, EventArgs e)
+        {
+            diaSplitsFile.ShowDialog();
         }
     }
 }
