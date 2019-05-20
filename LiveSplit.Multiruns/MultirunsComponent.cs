@@ -19,10 +19,12 @@ namespace LiveSplit.Multiruns
     {
         private readonly MultirunsSettings Settings;
         private readonly LiveSplitState State;
+        private readonly TimerModel Timer;
 
         public MultirunsComponent(LiveSplitState s)
         {
             State = s;
+            Timer = new TimerModel { CurrentState = State };
             Settings = new MultirunsSettings();
             State.OnSplit += State_OnSplit;
         }
@@ -35,6 +37,8 @@ namespace LiveSplit.Multiruns
                 var compgenfact = new StandardComparisonGeneratorsFactory();
                 var run = runfact.Create(compgenfact);
                 State.Run = run;
+                Timer.Reset(true);
+                Timer.Start();
             }
         }
 
@@ -60,6 +64,7 @@ namespace LiveSplit.Multiruns
 
         public override void SetSettings(XmlNode settings)
         {
+            Debug.WriteLine("Loaded settings node " + settings.InnerText);
             var elem = (XmlElement) settings;
             Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
             Settings.NextFile = SettingsHelper.ParseString(elem["Next"],string.Empty);

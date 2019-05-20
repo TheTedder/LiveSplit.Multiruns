@@ -30,24 +30,14 @@
         {
             System.Windows.Forms.Panel panel1;
             System.Windows.Forms.Label label1;
-            this.chkEnable = new System.Windows.Forms.CheckBox();
-            this.tbSplitsFile = new System.Windows.Forms.TextBox();
-            this.diaSplitsFile = new System.Windows.Forms.OpenFileDialog();
             this.btnSelect = new System.Windows.Forms.Button();
+            this.tbSplitsFile = new System.Windows.Forms.TextBox();
+            this.chkEnable = new System.Windows.Forms.CheckBox();
+            this.diaSplitsFile = new System.Windows.Forms.OpenFileDialog();
             panel1 = new System.Windows.Forms.Panel();
             label1 = new System.Windows.Forms.Label();
             panel1.SuspendLayout();
             this.SuspendLayout();
-            // 
-            // chkEnable
-            // 
-            this.chkEnable.AutoSize = true;
-            this.chkEnable.Location = new System.Drawing.Point(3, 3);
-            this.chkEnable.Name = "chkEnable";
-            this.chkEnable.Size = new System.Drawing.Size(58, 17);
-            this.chkEnable.TabIndex = 0;
-            this.chkEnable.Text = "enable";
-            this.chkEnable.UseVisualStyleBackColor = true;
             // 
             // panel1
             // 
@@ -60,6 +50,22 @@
             panel1.Size = new System.Drawing.Size(444, 144);
             panel1.TabIndex = 1;
             // 
+            // btnSelect
+            // 
+            this.btnSelect.Location = new System.Drawing.Point(275, 18);
+            this.btnSelect.Name = "btnSelect";
+            this.btnSelect.Size = new System.Drawing.Size(75, 23);
+            this.btnSelect.TabIndex = 3;
+            this.btnSelect.Text = "Select";
+            this.btnSelect.UseVisualStyleBackColor = true;
+            // 
+            // tbSplitsFile
+            // 
+            this.tbSplitsFile.Location = new System.Drawing.Point(69, 20);
+            this.tbSplitsFile.Name = "tbSplitsFile";
+            this.tbSplitsFile.Size = new System.Drawing.Size(200, 20);
+            this.tbSplitsFile.TabIndex = 2;
+            // 
             // label1
             // 
             label1.AutoSize = true;
@@ -69,25 +75,15 @@
             label1.TabIndex = 1;
             label1.Text = "Next Game";
             // 
-            // tbSplitsFile
+            // chkEnable
             // 
-            this.tbSplitsFile.Location = new System.Drawing.Point(69, 20);
-            this.tbSplitsFile.Name = "tbSplitsFile";
-            this.tbSplitsFile.Size = new System.Drawing.Size(200, 20);
-            this.tbSplitsFile.TabIndex = 2;
-            // 
-            // diaSplitsFile
-            // 
-            this.diaSplitsFile.FileName = "openFileDialog1";
-            // 
-            // btnSelect
-            // 
-            this.btnSelect.Location = new System.Drawing.Point(275, 18);
-            this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(75, 23);
-            this.btnSelect.TabIndex = 3;
-            this.btnSelect.Text = "Select";
-            this.btnSelect.UseVisualStyleBackColor = true;
+            this.chkEnable.AutoSize = true;
+            this.chkEnable.Location = new System.Drawing.Point(3, 3);
+            this.chkEnable.Name = "chkEnable";
+            this.chkEnable.Size = new System.Drawing.Size(58, 17);
+            this.chkEnable.TabIndex = 0;
+            this.chkEnable.Text = "enable";
+            this.chkEnable.UseVisualStyleBackColor = true;
             // 
             // MultirunsSettings
             // 
