@@ -15,14 +15,14 @@ namespace LiveSplit.Multiruns
     public partial class MultirunsSettings : UserControl
     {
         public bool On { get; set; }
-        public string NextFile { get; set; }
+        private readonly MultirunsComponent Comp;
 
-        public MultirunsSettings()
+        public MultirunsSettings(MultirunsComponent mc)
         {
             InitializeComponent();
+            Comp = mc;
 
-            chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
-            tbSplitsFile.DataBindings.Add(nameof(TextBox.Text), this, nameof(NextFile), false, DataSourceUpdateMode.OnPropertyChanged);
+            chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false);
             btnSelect.Click += BtnSelect_Click;
             diaSplitsFile.FileOk += DiaSplitsFile_FileOk;
         }
@@ -32,6 +32,10 @@ namespace LiveSplit.Multiruns
             if (!e.Cancel)
             {
                 tbSplitsFile.Text = diaSplitsFile.FileName;
+                if (On)
+                {
+                    Comp.LoadSplits(0);
+                }
             }
         }
 

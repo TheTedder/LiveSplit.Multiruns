@@ -104,8 +104,8 @@
 
         private System.Windows.Forms.CheckBox chkEnable;
         private System.Windows.Forms.Button btnSelect;
-        private System.Windows.Forms.TextBox tbSplitsFile;
         private System.Windows.Forms.OpenFileDialog diaSplitsFile;
         private System.Windows.Forms.GroupBox gbSplits;
+        public System.Windows.Forms.TextBox tbSplitsFile;
     }
 }
