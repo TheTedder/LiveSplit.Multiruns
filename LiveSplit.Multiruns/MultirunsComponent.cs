@@ -9,6 +9,9 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using LiveSplit.Model.RunSavers;
+using LiveSplit.Model.RunFactories;
+using LiveSplit.Model.Comparisons;
 
 namespace LiveSplit.Multiruns
 {
@@ -21,13 +24,25 @@ namespace LiveSplit.Multiruns
         {
             State = s;
             Settings = new MultirunsSettings();
+            State.OnSplit += State_OnSplit;
+        }
+
+        private void State_OnSplit(object sender, EventArgs e)
+        {
+            if (State.CurrentPhase == TimerPhase.Ended)
+            {
+                var runfact = new XMLRunFactory(Settings.Open(),Settings.NextFile);
+                var compgenfact = new StandardComparisonGeneratorsFactory();
+                var run = runfact.Create(compgenfact);
+                State.Run = run;
+            }
         }
 
         public override string ComponentName => "Multiruns";
 
         public override void Dispose()
         {
-
+            State.OnSplit -= State_OnSplit;
         }
         public override XmlNode GetSettings(XmlDocument document)
         {

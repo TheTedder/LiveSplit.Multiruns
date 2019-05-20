@@ -8,6 +8,7 @@ using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 using LiveSplit.UI.Components;
+using System.IO;
 
 namespace LiveSplit.Multiruns
 {
@@ -39,6 +40,12 @@ namespace LiveSplit.Multiruns
         private void BtnSelect_Click(object sender, EventArgs e)
         {
             diaSplitsFile.ShowDialog();
+        }
+
+        public Stream Open()
+        {
+            diaSplitsFile.FileName = tbSplitsFile.Text;
+            return diaSplitsFile.OpenFile();
         }
     }
 }
