@@ -16,13 +16,12 @@ namespace LiveSplit.Multiruns
     {
         public MultirunsSettings Settings;
         private readonly LiveSplitState State;
-        private string OriginalGame;
 
         public MultirunsComponent(LiveSplitState s)
         {
             State = s;
             Settings = new MultirunsSettings();
-            OriginalGame = State.Run.GameName;
+            Settings.GameName = State.Run.GameName;
             
             try
             {
@@ -78,7 +77,7 @@ namespace LiveSplit.Multiruns
             {
                 if(State.CurrentPhase == TimerPhase.Ended)
                 {
-                    State.Run.GameName = OriginalGame;
+                    State.Run.GameName = Settings.GameName;
                 }
                 else
                 {
@@ -107,7 +106,7 @@ namespace LiveSplit.Multiruns
             XmlElement node = document.CreateElement("Settings");
             node.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
             node.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
-            node.AppendChild(SettingsHelper.ToElement(document, "Game", OriginalGame));
+            node.AppendChild(SettingsHelper.ToElement(document, "Game", Settings.GameName));
             return node;
         }
 
@@ -122,7 +121,7 @@ namespace LiveSplit.Multiruns
             string game = SettingsHelper.ParseString(((XmlElement)settings)["Game"]);
             if (!string.IsNullOrEmpty(game))
             {
-                OriginalGame = game;
+                Settings.GameName = game;
             }
         }
 

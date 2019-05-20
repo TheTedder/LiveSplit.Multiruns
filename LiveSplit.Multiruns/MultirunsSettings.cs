@@ -14,11 +14,13 @@ namespace LiveSplit.Multiruns
     public partial class MultirunsSettings : UserControl
     {
         public bool On { get; set; }
+        public string GameName { get; set; }
 
         public MultirunsSettings()
         {
             InitializeComponent();
             chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On),false,DataSourceUpdateMode.OnPropertyChanged);
+            txtGameName.DataBindings.Add(nameof(TextBox.Text), this, nameof(GameName), false, DataSourceUpdateMode.OnValidation);
             On = true;
         }
     }
