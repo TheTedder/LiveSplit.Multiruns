@@ -42,8 +42,6 @@
             // chkEnable
             // 
             this.chkEnable.AutoSize = true;
-            this.chkEnable.Checked = true;
-            this.chkEnable.CheckState = System.Windows.Forms.CheckState.Checked;
             this.chkEnable.Location = new System.Drawing.Point(3, 3);
             this.chkEnable.Name = "chkEnable";
             this.chkEnable.Size = new System.Drawing.Size(58, 17);

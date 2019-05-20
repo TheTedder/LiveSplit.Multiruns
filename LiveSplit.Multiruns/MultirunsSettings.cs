@@ -25,8 +25,6 @@ namespace LiveSplit.Multiruns
             tbSplitsFile.DataBindings.Add(nameof(TextBox.Text), this, nameof(NextFile), false, DataSourceUpdateMode.OnPropertyChanged);
             btnSelect.Click += BtnSelect_Click;
             diaSplitsFile.FileOk += DiaSplitsFile_FileOk;
-
-            On = true;
         }
 
         private void DiaSplitsFile_FileOk(object sender, CancelEventArgs e)
