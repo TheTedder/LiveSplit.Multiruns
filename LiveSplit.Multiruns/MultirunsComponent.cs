@@ -20,9 +20,11 @@ namespace LiveSplit.Multiruns
         public MultirunsComponent(LiveSplitState s)
         {
             State = s;
-            Settings = new MultirunsSettings();
-            Settings.GameName = State.Run.GameName;
-            
+            Settings = new MultirunsSettings()
+            {
+                GameName = State.Run.GameName
+            };
+
             try
             {
                 State.Run.GameName = FindNextSplit();

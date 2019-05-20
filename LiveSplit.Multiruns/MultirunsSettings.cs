@@ -19,8 +19,10 @@ namespace LiveSplit.Multiruns
         public MultirunsSettings()
         {
             InitializeComponent();
-            chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On),false,DataSourceUpdateMode.OnPropertyChanged);
+
+            chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
             txtGameName.DataBindings.Add(nameof(TextBox.Text), this, nameof(GameName), false, DataSourceUpdateMode.OnValidation);
+
             On = true;
         }
     }
