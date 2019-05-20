@@ -34,6 +34,7 @@ namespace LiveSplit.Multiruns
             XmlElement node = document.CreateElement("Settings");
             node.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
             node.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
+            node.AppendChild(SettingsHelper.ToElement(document, "Next", Settings.NextFile));
             return node;
         }
 
@@ -46,6 +47,7 @@ namespace LiveSplit.Multiruns
         {
             var elem = (XmlElement) settings;
             Settings.On = SettingsHelper.ParseBool(elem["Enabled"], true);
+            Settings.NextFile = elem["Next"].InnerText ?? string.Empty;
         }
 
         public override void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
