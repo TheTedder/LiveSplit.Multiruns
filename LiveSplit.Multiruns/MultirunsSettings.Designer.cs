@@ -70,7 +70,7 @@
             // 
             this.txtGameName.Location = new System.Drawing.Point(75, 20);
             this.txtGameName.Name = "txtGameName";
-            this.txtGameName.Size = new System.Drawing.Size(100, 20);
+            this.txtGameName.Size = new System.Drawing.Size(200, 20);
             this.txtGameName.TabIndex = 2;
             // 
             // MultirunsSettings
