@@ -61,8 +61,8 @@ namespace LiveSplit.Multiruns
         public override void SetSettings(XmlNode settings)
         {
             var elem = (XmlElement) settings;
-            Settings.On = SettingsHelper.ParseBool(elem["Enabled"], true);
-            Settings.NextFile = elem["Next"].InnerText ?? string.Empty;
+            Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
+            Settings.NextFile = SettingsHelper.ParseString(elem["Next"],string.Empty);
         }
 
         public override void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
