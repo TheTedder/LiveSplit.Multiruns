@@ -27,7 +27,7 @@ namespace LiveSplit.Multiruns
             Timer = new TimerModel { CurrentState = State };
             Settings = new MultirunsSettings(this);
             State.OnSplit += State_OnSplit;
-            Settings.tbSplitsFile.Text = State.Run.FilePath;
+            Settings[0] = State.Run.FilePath;
         }
 
         private void State_OnSplit(object sender, EventArgs e)
@@ -41,7 +41,7 @@ namespace LiveSplit.Multiruns
 
         public void LoadSplits(int i)
         {
-            var runfact = new XMLRunFactory(Settings.Open(),Settings.tbSplitsFile.Text);
+            var runfact = new XMLRunFactory(Settings.Open(i),Settings[i]);
             var compgenfact = new StandardComparisonGeneratorsFactory();
             var run = runfact.Create(compgenfact);
             State.Run = run;
@@ -59,7 +59,7 @@ namespace LiveSplit.Multiruns
             XmlElement node = document.CreateElement("Settings");
             node.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
             node.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
-            node.AppendChild(SettingsHelper.ToElement(document, "Next", Settings.tbSplitsFile.Text));
+            node.AppendChild(SettingsHelper.ToElement(document, "Next", Settings[0]));
             return node;
         }
 
@@ -73,15 +73,18 @@ namespace LiveSplit.Multiruns
             Debug.WriteLine("Loaded settings node " + settings.InnerText);
             var elem = (XmlElement) settings;
             Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
-            Settings.tbSplitsFile.Text = SettingsHelper.ParseString(elem["Next"],string.Empty);
+            Settings[0] = SettingsHelper.ParseString(elem["Next"],string.Empty);
 
-            if (string.IsNullOrEmpty(Settings.tbSplitsFile.Text))
+            if (Settings.On)
             {
-                State.Run = new Run(new StandardComparisonGeneratorsFactory());
-            }
-            else
-            {
-                LoadSplits(0);
+                if (string.IsNullOrEmpty(Settings[0]))
+                {
+                    State.Run = new Run(new StandardComparisonGeneratorsFactory());
+                }
+                else
+                {
+                    LoadSplits(0);
+                }
             }
         }
 
