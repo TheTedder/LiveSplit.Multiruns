@@ -141,7 +141,9 @@ namespace LiveSplit.Multiruns
             }
             set
             {
-                flpSplits.Controls[i].Controls[1].Text = value;
+                if (flpSplits.Controls[i].Controls[1].Text != value) {
+                    flpSplits.Controls[i].Controls[1].Text = value;
+                }
             }
         }
 

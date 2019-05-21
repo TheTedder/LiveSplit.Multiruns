@@ -85,7 +85,7 @@ namespace LiveSplit.Multiruns
             var splitsElem = elem["Splits"];
             for (int i = 0; i < MultirunsSettings.rows; i++)
             {
-                Settings[i] = SettingsHelper.ParseString((XmlElement)splitsElem.ChildNodes.Item(i), string.Empty);
+                Settings[i] = SettingsHelper.ParseString((XmlElement)splitsElem.ChildNodes.Item(i), string.Empty) ?? string.Empty;
             }
         }
 
