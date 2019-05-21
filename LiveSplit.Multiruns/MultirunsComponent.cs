@@ -59,11 +59,18 @@ namespace LiveSplit.Multiruns
         }
         public override XmlNode GetSettings(XmlDocument document)
         {
-            XmlElement node = document.CreateElement("Settings");
-            node.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
-            node.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
-            node.AppendChild(SettingsHelper.ToElement(document, "Next", Settings[0]));
-            return node;
+            XmlElement elem = document.CreateElement("Settings");
+            elem.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
+            elem.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
+            var splitsElem = elem.AppendChild(document.CreateElement("Splits"));
+
+            for (int i = 0; i < MultirunsSettings.rows; i++)
+            {
+                var splitElem = (XmlElement)splitsElem.AppendChild(document.CreateElement("File"));
+                splitElem.InnerText = Settings[i];
+            }
+
+            return elem;
         }
 
         public override System.Windows.Forms.Control GetSettingsControl(LayoutMode mode)
@@ -73,10 +80,13 @@ namespace LiveSplit.Multiruns
 
         public override void SetSettings(XmlNode settings)
         {
-            Debug.WriteLine("Loaded settings node " + settings.InnerText);
             var elem = (XmlElement) settings;
             Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
-            Settings[0] = SettingsHelper.ParseString(elem["Next"],string.Empty);
+            var splitsElem = elem["Splits"];
+            for (int i = 0; i < MultirunsSettings.rows; i++)
+            {
+                Settings[i] = SettingsHelper.ParseString((XmlElement)splitsElem.ChildNodes.Item(i), string.Empty);
+            }
         }
 
         public override void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
