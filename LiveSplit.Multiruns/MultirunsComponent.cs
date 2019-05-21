@@ -67,7 +67,9 @@ namespace LiveSplit.Multiruns
             for (int i = 0; i < MultirunsSettings.rows; i++)
             {
                 var splitElem = (XmlElement)splitsElem.AppendChild(document.CreateElement("File"));
-                splitElem.InnerText = Settings[i];
+                if (!string.IsNullOrEmpty(Settings[i])){
+                    splitElem.InnerText = Settings[i];
+                }
             }
 
             return elem;
