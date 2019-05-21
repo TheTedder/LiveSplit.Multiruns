@@ -30,6 +30,7 @@ namespace LiveSplit.Multiruns
         }
         private readonly MultirunsComponent Comp;
         private int row;
+        public const int rows = 4;
 
         public MultirunsSettings(MultirunsComponent mc)
         {
@@ -49,7 +50,7 @@ namespace LiveSplit.Multiruns
                 c.SuspendLayout();
             }
 
-            for (int i = 0; i < 4; i++)
+            for (int i = 0; i < rows; i++)
             {
                 Button bOpen = new Button()
                 {
