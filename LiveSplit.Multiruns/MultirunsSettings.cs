@@ -14,7 +14,20 @@ namespace LiveSplit.Multiruns
 {
     public partial class MultirunsSettings : UserControl
     {
-        public bool On { get; set; }
+        private bool On_private;
+        public bool On {
+            get
+            {
+                return On_private;
+            }
+            set {
+                if (value && !On)
+                {
+                    Comp.LoadSplits(0);
+                }
+                On_private = value;
+            }
+        }
         private readonly MultirunsComponent Comp;
         private int row;
 
@@ -23,7 +36,7 @@ namespace LiveSplit.Multiruns
             InitializeComponent();
             Comp = mc;
 
-            chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false);
+            chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
             diaSplitsFile.FileOk += DiaSplitsFile_FileOk;
 
             Control[] controls = new Control[]
@@ -36,49 +49,60 @@ namespace LiveSplit.Multiruns
                 c.SuspendLayout();
             }
 
-            for (int i = 0; i < 2; i++)
+            for (int i = 0; i < 4; i++)
             {
-                Button b = new Button()
+                Button bOpen = new Button()
                 {
                     AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowOnly,
                     Dock = DockStyle.Left,
                     Location = new Point(0, 0),
-                    Name = "btnSelect" + i.ToString(),
+                    Name = "btnOpen" + i.ToString(),
                     Size = new Size(52, 20),
                     TabIndex = 0,
-                    Text = "Open...",
+                    Text = "Open..."
                 };
+                bOpen.Click += BOpen_Click;
 
-                b.Click += BtnClick;
+                Button bClear = new Button()
+                {
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowOnly,
+                    Dock = DockStyle.Right,
+                    Name = "btnClear" + i.ToString(),
+                    Size = new Size(52, 20),
+                    TabIndex = 1,
+                    Text = "Clear"
+                };
+                bClear.Click += BClear_Click;
 
                 TextBox tb = new TextBox()
                 {
-
-                    Dock = DockStyle.Top,
+                    Dock = DockStyle.None,
                     Enabled = false,
                     Location = new Point(52, 0),
                     Name = "tbSplitsFile"+ i.ToString(),
-                    Size = new Size(380, 20),
-                    TabIndex = 1,
+                    Size = new Size(328, 20),
                     WordWrap = false,
                     Text = ""
                 };
 
                 Panel p = new Panel();
-                using (p) {
-                    SuspendLayout();
-                    AutoSizeMode = AutoSizeMode.GrowAndShrink;
-                    Location = new Point(3, (23 * i) + 3);
-                    Name = "pSplitsFile" + i.ToString();
-                    Size = new Size(432, 20);
-                    TabIndex = i;
-                    Controls.Add(tb);
-                    Controls.Add(b);
-                    ResumeLayout(false);
-                    PerformLayout();
-                };
+                p.SuspendLayout();    
+                p.AutoSizeMode = AutoSizeMode.GrowAndShrink;    
+                p.Location = new Point(3, (23 * i) + 3);    
+                p.Name = "pSplitsFile" + i.ToString();    
+                p.Size = new Size(432, 20);    
+                p.TabIndex = i;    
+                p.Controls.Add(bOpen);
+                p.Controls.Add(tb);
+                p.Controls.Add(bClear);
+                p.ResumeLayout(false);
+                p.PerformLayout();    
                 flpSplits.Controls.Add(p);
             }
+
+            ((TextBox)flpSplits.Controls[0].Controls[1]).TextChanged += TbSplitsFile0_TextChanged;
 
             foreach (Control c in controls)
             {
@@ -88,7 +112,21 @@ namespace LiveSplit.Multiruns
             gbSplits.PerformLayout();
         }
 
-        private void BtnClick(object sender, EventArgs e)
+        private void TbSplitsFile0_TextChanged(object sender, EventArgs e)
+        {
+            if (On)
+            {
+                Comp.LoadSplits(0);
+            }
+        }
+
+        private void BClear_Click(object sender, EventArgs e)
+        {
+            Control panel = ((Control)sender).Parent;
+            panel.Controls[1].Text = "";
+        }
+
+        private void BOpen_Click(object sender, EventArgs e)
         {
             Control panel = ((Control)sender).Parent;
             row = flpSplits.Controls.GetChildIndex(panel);
@@ -112,10 +150,6 @@ namespace LiveSplit.Multiruns
             {
                 Control c = flpSplits.Controls[row].Controls[1];
                 c.Text = diaSplitsFile.FileName;
-                if (On && row == 0)
-                {
-                    Comp.LoadSplits(0);
-                }
             }
         }
 

@@ -41,11 +41,14 @@ namespace LiveSplit.Multiruns
 
         public void LoadSplits(int i)
         {
-            var runfact = new XMLRunFactory(Settings.Open(i),Settings[i]);
-            var compgenfact = new StandardComparisonGeneratorsFactory();
-            var run = runfact.Create(compgenfact);
-            State.Run = run;
-            Timer.Reset(true);
+            if (!string.IsNullOrEmpty(Settings[i]))
+            {
+                var compgenfact = new StandardComparisonGeneratorsFactory();
+                var runfact = new XMLRunFactory(Settings.Open(i),Settings[i]);
+                var run = runfact.Create(compgenfact);
+                State.Run = run;
+                Timer.Reset(true);
+            }
         }
 
         public override string ComponentName => "Multiruns";
@@ -74,18 +77,6 @@ namespace LiveSplit.Multiruns
             var elem = (XmlElement) settings;
             Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
             Settings[0] = SettingsHelper.ParseString(elem["Next"],string.Empty);
-
-            if (Settings.On)
-            {
-                if (string.IsNullOrEmpty(Settings[0]))
-                {
-                    State.Run = new Run(new StandardComparisonGeneratorsFactory());
-                }
-                else
-                {
-                    LoadSplits(0);
-                }
-            }
         }
 
         public override void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
