@@ -31,16 +31,11 @@
             System.Windows.Forms.Panel panel1;
             this.gbSplits = new System.Windows.Forms.GroupBox();
             this.flpSplits = new System.Windows.Forms.FlowLayoutPanel();
-            this.panel2 = new System.Windows.Forms.Panel();
-            this.tbSplitsFile = new System.Windows.Forms.TextBox();
-            this.btnSelect = new System.Windows.Forms.Button();
             this.chkEnable = new System.Windows.Forms.CheckBox();
             this.diaSplitsFile = new System.Windows.Forms.OpenFileDialog();
             panel1 = new System.Windows.Forms.Panel();
             panel1.SuspendLayout();
             this.gbSplits.SuspendLayout();
-            this.flpSplits.SuspendLayout();
-            this.panel2.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
@@ -68,44 +63,12 @@
             // flpSplits
             // 
             this.flpSplits.AutoSize = true;
-            this.flpSplits.Controls.Add(this.panel2);
             this.flpSplits.Dock = System.Windows.Forms.DockStyle.Fill;
             this.flpSplits.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flpSplits.Location = new System.Drawing.Point(3, 16);
             this.flpSplits.Name = "flpSplits";
             this.flpSplits.Size = new System.Drawing.Size(438, 258);
             this.flpSplits.TabIndex = 5;
-            // 
-            // panel2
-            // 
-            this.panel2.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
-            this.panel2.Controls.Add(this.tbSplitsFile);
-            this.panel2.Controls.Add(this.btnSelect);
-            this.panel2.Location = new System.Drawing.Point(3, 3);
-            this.panel2.Name = "panel2";
-            this.panel2.Size = new System.Drawing.Size(432, 20);
-            this.panel2.TabIndex = 4;
-            // 
-            // tbSplitsFile
-            // 
-            this.tbSplitsFile.Dock = System.Windows.Forms.DockStyle.Top;
-            this.tbSplitsFile.Enabled = false;
-            this.tbSplitsFile.Location = new System.Drawing.Point(52, 0);
-            this.tbSplitsFile.Name = "tbSplitsFile";
-            this.tbSplitsFile.Size = new System.Drawing.Size(380, 20);
-            this.tbSplitsFile.TabIndex = 2;
-            this.tbSplitsFile.WordWrap = false;
-            // 
-            // btnSelect
-            // 
-            this.btnSelect.AutoSize = true;
-            this.btnSelect.Dock = System.Windows.Forms.DockStyle.Left;
-            this.btnSelect.Location = new System.Drawing.Point(0, 0);
-            this.btnSelect.Name = "btnSelect";
-            this.btnSelect.Size = new System.Drawing.Size(52, 20);
-            this.btnSelect.TabIndex = 3;
-            this.btnSelect.Text = "Open...";
-            this.btnSelect.UseVisualStyleBackColor = true;
             // 
             // chkEnable
             // 
@@ -132,9 +95,6 @@
             panel1.PerformLayout();
             this.gbSplits.ResumeLayout(false);
             this.gbSplits.PerformLayout();
-            this.flpSplits.ResumeLayout(false);
-            this.panel2.ResumeLayout(false);
-            this.panel2.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -142,11 +102,8 @@
         #endregion
 
         private System.Windows.Forms.CheckBox chkEnable;
-        private System.Windows.Forms.Button btnSelect;
         private System.Windows.Forms.OpenFileDialog diaSplitsFile;
         private System.Windows.Forms.GroupBox gbSplits;
-        private System.Windows.Forms.Panel panel2;
         private System.Windows.Forms.FlowLayoutPanel flpSplits;
-        private System.Windows.Forms.TextBox tbSplitsFile;
     }
 }
