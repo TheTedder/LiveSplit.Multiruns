@@ -89,6 +89,7 @@ namespace LiveSplit.Multiruns
             State.OnSplit -= State_OnSplit;
             State.OnReset -= State_OnReset;
         }
+
         public override XmlNode GetSettings(XmlDocument document)
         {
             XmlElement elem = document.CreateElement("Settings");
@@ -122,7 +123,7 @@ namespace LiveSplit.Multiruns
             {
                 for (int i = 0; i < MultirunsSettings.rows; i++)
                 {
-                    Settings[i] = SettingsHelper.ParseString((XmlElement)splitsElem.ChildNodes.Item(i), string.Empty) ?? string.Empty;
+                    Settings[i] = SettingsHelper.ParseString((XmlElement)splitsElem.ChildNodes.Item(i), string.Empty);
                 }
             }
         }
