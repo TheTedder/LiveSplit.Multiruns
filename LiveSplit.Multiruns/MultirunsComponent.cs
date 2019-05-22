@@ -9,87 +9,76 @@ using System.Reflection;
 using System.Text;
 using System.Threading.Tasks;
 using System.Xml;
+using LiveSplit.Model.RunSavers;
+using LiveSplit.Model.RunFactories;
+using LiveSplit.Model.Comparisons;
 
 namespace LiveSplit.Multiruns
 {
-    class MultirunsComponent : LogicComponent
+    public class MultirunsComponent : LogicComponent
     {
-        public MultirunsSettings Settings;
+        private readonly MultirunsSettings Settings;
         private readonly LiveSplitState State;
+        private readonly TimerModel Timer;
+        public int Index { get; private set; } = 0;
+        private bool DoReset = false;
 
         public MultirunsComponent(LiveSplitState s)
         {
             State = s;
-            Settings = new MultirunsSettings()
-            {
-                GameName = State.Run.GameName
-            };
-
-            try
-            {
-                State.Run.GameName = FindNextSplit();
-            }
-            catch (InvalidOperationException yourMom)
-            {
-                Debug.WriteLine(yourMom.Message);
-            }
-
-            State.OnSplit += Change;
-            State.OnSkipSplit += Change;
-            State.OnUndoSplit += Change;
-            State.OnReset += Reset;
+            Timer = new TimerModel { CurrentState = State };
+            Settings = new MultirunsSettings(this);
+            State.OnSplit += State_OnSplit;
+            State.OnReset += State_OnReset;
+            Settings[0] = State.Run.FilePath;
         }
 
-        public string FindNextSplit()
+        private void State_OnReset(object sender, TimerPhase value)
         {
-            ISegment[] splits;
-
-            switch (State.CurrentPhase)
+            if (Index > 0 && DoReset)
             {
-                case TimerPhase.Ended:
-                case TimerPhase.NotRunning:
-                    splits = State.Run.ToArray();
-                    break;
-
-                case TimerPhase.Paused:
-                case TimerPhase.Running:
-                    splits = new ISegment[State.Run.Count() - State.CurrentSplitIndex];
-                    Array.Copy(State.Run.ToArray(), State.CurrentSplitIndex, splits, 0, splits.Length);
-                    break;
-
-                default:
-                    splits = Array.Empty<ISegment>();
-                    break;
+                LoadSplits(0);
+                Index = 0;
+                DoReset = false;
             }
-
-            return (from ISegment split in splits where !split.Name.Substring(0, 1).Equals("-") select split.Name).First();
+                
         }
 
-        private void Reset(object sender, TimerPhase value)
+        private void State_OnSplit(object sender, EventArgs e)
         {
-            if (Settings.On && !string.IsNullOrEmpty(FindNextSplit()))
+            if (State.CurrentPhase == TimerPhase.Ended && Settings.On)
             {
-                State.Run.GameName = FindNextSplit();
-            }
-        }
-
-        private void Change(object sender, EventArgs e)
-        {
-            if (Settings.On)
-            {
-                if(State.CurrentPhase == TimerPhase.Ended)
+                if (LoadSplits(Index + 1))
                 {
-                    State.Run.GameName = Settings.GameName;
+                    Index++;
+                    DoReset = false;
+                    Timer.Reset();
+                    DoReset = true;
+                    Timer.Start();
                 }
-                else
+            }
+        }
+
+        public bool LoadSplits(int i)
+        {
+            if (!string.IsNullOrEmpty(Settings[i]))
+            {
+                try
                 {
-                    string game = FindNextSplit();
-                    Debug.WriteLine("Found " + game);
-                    if (!game.Equals(State.Run.GameName))
-                    {
-                        State.Run.GameName = game;
-                    }
+                    var compgenfact = new StandardComparisonGeneratorsFactory();
+                    var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
+                    var run = runfact.Create(compgenfact);
+                    State.Run = run;
+                    return true;
                 }
+                catch (IndexOutOfRangeException)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -97,19 +86,25 @@ namespace LiveSplit.Multiruns
 
         public override void Dispose()
         {
-            State.OnSplit -= Change;
-            State.OnSkipSplit -= Change;
-            State.OnUndoSplit -= Change;
-            State.OnReset -= Reset;
+            State.OnSplit -= State_OnSplit;
+            State.OnReset -= State_OnReset;
         }
-
         public override XmlNode GetSettings(XmlDocument document)
         {
-            XmlElement node = document.CreateElement("Settings");
-            node.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
-            node.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
-            node.AppendChild(SettingsHelper.ToElement(document, "Game", Settings.GameName));
-            return node;
+            XmlElement elem = document.CreateElement("Settings");
+            elem.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
+            elem.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
+            var splitsElem = elem.AppendChild(document.CreateElement("Splits"));
+
+            for (int i = 0; i < MultirunsSettings.rows; i++)
+            {
+                var splitElem = (XmlElement)splitsElem.AppendChild(document.CreateElement("File"));
+                if (!string.IsNullOrEmpty(Settings[i])){
+                    splitElem.InnerText = Settings[i];
+                }
+            }
+
+            return elem;
         }
 
         public override System.Windows.Forms.Control GetSettingsControl(LayoutMode mode)
@@ -119,11 +114,16 @@ namespace LiveSplit.Multiruns
 
         public override void SetSettings(XmlNode settings)
         {
-            Settings.On = SettingsHelper.ParseBool(((XmlElement) settings)["Enabled"],true);
-            string game = SettingsHelper.ParseString(((XmlElement)settings)["Game"]);
-            if (!string.IsNullOrEmpty(game))
+            var elem = (XmlElement) settings;
+            Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
+            var splitsElem = elem["Splits"];
+
+            if (splitsElem != null)
             {
-                Settings.GameName = game;
+                for (int i = 0; i < MultirunsSettings.rows; i++)
+                {
+                    Settings[i] = SettingsHelper.ParseString((XmlElement)splitsElem.ChildNodes.Item(i), string.Empty) ?? string.Empty;
+                }
             }
         }
 
