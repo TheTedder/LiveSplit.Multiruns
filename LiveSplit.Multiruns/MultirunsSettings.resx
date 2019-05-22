@@ -123,4 +123,7 @@
   <metadata name="diaSplitsFile.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
     <value>28, 29</value>
   </metadata>
+  <metadata name="sfdSplitsFile.TrayLocation" type="System.Drawing.Point, System.Drawing, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b03f5f7f11d50a3a">
+    <value>144, 29</value>
+  </metadata>
 </root>
