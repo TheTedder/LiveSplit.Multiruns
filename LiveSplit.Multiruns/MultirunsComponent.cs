@@ -20,6 +20,8 @@ namespace LiveSplit.Multiruns
         private readonly MultirunsSettings Settings;
         private readonly LiveSplitState State;
         private readonly TimerModel Timer;
+        public int Index { get; private set; } = 0;
+        private bool DoReset = false;
 
         public MultirunsComponent(LiveSplitState s)
         {
@@ -27,27 +29,56 @@ namespace LiveSplit.Multiruns
             Timer = new TimerModel { CurrentState = State };
             Settings = new MultirunsSettings(this);
             State.OnSplit += State_OnSplit;
+            State.OnReset += State_OnReset;
             Settings[0] = State.Run.FilePath;
+        }
+
+        private void State_OnReset(object sender, TimerPhase value)
+        {
+            if (Index > 0 && DoReset)
+            {
+                LoadSplits(0);
+                Index = 0;
+                DoReset = false;
+            }
+                
         }
 
         private void State_OnSplit(object sender, EventArgs e)
         {
             if (State.CurrentPhase == TimerPhase.Ended && Settings.On)
             {
-                LoadSplits(0);
-                Timer.Start();
+                if (LoadSplits(Index + 1))
+                {
+                    Index++;
+                    DoReset = false;
+                    Timer.Reset();
+                    DoReset = true;
+                    Timer.Start();
+                }
             }
         }
 
-        public void LoadSplits(int i)
+        public bool LoadSplits(int i)
         {
             if (!string.IsNullOrEmpty(Settings[i]))
             {
-                var compgenfact = new StandardComparisonGeneratorsFactory();
-                var runfact = new XMLRunFactory(Settings.Open(i),Settings[i]);
-                var run = runfact.Create(compgenfact);
-                State.Run = run;
-                Timer.Reset(true);
+                try
+                {
+                    var compgenfact = new StandardComparisonGeneratorsFactory();
+                    var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
+                    var run = runfact.Create(compgenfact);
+                    State.Run = run;
+                    return true;
+                }
+                catch (IndexOutOfRangeException)
+                {
+                    return false;
+                }
+            }
+            else
+            {
+                return false;
             }
         }
 
@@ -56,6 +87,7 @@ namespace LiveSplit.Multiruns
         public override void Dispose()
         {
             State.OnSplit -= State_OnSplit;
+            State.OnReset -= State_OnReset;
         }
         public override XmlNode GetSettings(XmlDocument document)
         {
