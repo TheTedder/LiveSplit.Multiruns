@@ -33,6 +33,7 @@
             this.flpSplits = new System.Windows.Forms.FlowLayoutPanel();
             this.chkEnable = new System.Windows.Forms.CheckBox();
             this.diaSplitsFile = new System.Windows.Forms.OpenFileDialog();
+            this.sfdSplitsFile = new System.Windows.Forms.SaveFileDialog();
             panel1 = new System.Windows.Forms.Panel();
             panel1.SuspendLayout();
             this.gbSplits.SuspendLayout();
@@ -84,6 +85,10 @@
             // 
             this.diaSplitsFile.Filter = "Splits Files (*.lss)|*.lss";
             // 
+            // sfdSplitsFile
+            // 
+            this.sfdSplitsFile.AddExtension = false;
+            // 
             // MultirunsSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
@@ -105,5 +110,6 @@
         private System.Windows.Forms.OpenFileDialog diaSplitsFile;
         private System.Windows.Forms.GroupBox gbSplits;
         private System.Windows.Forms.FlowLayoutPanel flpSplits;
+        private System.Windows.Forms.SaveFileDialog sfdSplitsFile;
     }
 }

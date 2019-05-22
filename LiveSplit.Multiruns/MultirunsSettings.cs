@@ -131,6 +131,7 @@ namespace LiveSplit.Multiruns
         {
             Control panel = ((Control)sender).Parent;
             row = flpSplits.Controls.GetChildIndex(panel);
+            diaSplitsFile.FileName = this[row];
             diaSplitsFile.ShowDialog();
         }
 
@@ -158,8 +159,14 @@ namespace LiveSplit.Multiruns
 
         public Stream Open(int i)
         {
-            diaSplitsFile.FileName = flpSplits.Controls[i].Controls[1].Text;
+            diaSplitsFile.FileName = this[i];
             return diaSplitsFile.OpenFile();
+        }
+
+        public Stream Save(int i)
+        {
+            sfdSplitsFile.FileName = this[i];
+            return sfdSplitsFile.OpenFile();
         }
     }
 }

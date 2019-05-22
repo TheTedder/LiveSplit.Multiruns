@@ -12,6 +12,7 @@ using System.Xml;
 using LiveSplit.Model.RunSavers;
 using LiveSplit.Model.RunFactories;
 using LiveSplit.Model.Comparisons;
+using System.Windows.Forms;
 
 namespace LiveSplit.Multiruns
 {
@@ -22,9 +23,11 @@ namespace LiveSplit.Multiruns
         private readonly TimerModel Timer;
         public int Index { get; private set; } = 0;
         private bool DoReset = false;
+        private List<IRun> PendingRuns;
 
         public MultirunsComponent(LiveSplitState s)
         {
+            PendingRuns = new List<IRun>(MultirunsSettings.rows);
             State = s;
             Timer = new TimerModel { CurrentState = State };
             Settings = new MultirunsSettings(this);
@@ -37,18 +40,48 @@ namespace LiveSplit.Multiruns
         {
             if (Index > 0 && DoReset)
             {
-                LoadSplits(0);
+                SaveRuns();
+                State.Run = PendingRuns[0];
+                PendingRuns.Clear();
                 Index = 0;
                 DoReset = false;
             }
-                
+        }
+
+        public void SaveRuns()
+        {
+            if(PendingRuns.Count > 0)
+            {
+                var owner = (IWin32Window)State.Form.GetContainerControl();
+                var runsaver = new XMLRunSaver();
+                for (int i = 0; i < PendingRuns.Count; i++)
+                {
+                    if (!string.IsNullOrEmpty(Settings[i]) && i!= Index)
+                    {
+                        State.Run = PendingRuns[i];
+                        string text = "Save this " + PendingRuns[i].GameName + " run?";
+                        if (MessageBox.Show(owner, text, "Livesplit", MessageBoxButtons.YesNo) == DialogResult.Yes)
+                        {
+                            runsaver.Save(PendingRuns[i], Settings.Save(i));
+                        }
+                    }
+                }
+            }
+        }
+
+        public void TimerUpdate()
+        {
+            Timer.UpdateAttemptHistory();
+            Timer.UpdateBestSegments();
+            Timer.UpdatePBSplits();
+            Timer.UpdateSegmentHistory();
         }
 
         private void State_OnSplit(object sender, EventArgs e)
         {
             if (State.CurrentPhase == TimerPhase.Ended && Settings.On)
             {
-                if (LoadSplits(Index + 1))
+                if (LoadSplits(Index + 1,true))
                 {
                     Index++;
                     DoReset = false;
@@ -59,7 +92,7 @@ namespace LiveSplit.Multiruns
             }
         }
 
-        public bool LoadSplits(int i)
+        public bool LoadSplits(int i, bool saveRun = false)
         {
             if (!string.IsNullOrEmpty(Settings[i]))
             {
@@ -68,11 +101,17 @@ namespace LiveSplit.Multiruns
                     var compgenfact = new StandardComparisonGeneratorsFactory();
                     var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
                     var run = runfact.Create(compgenfact);
+                    if (saveRun)
+                    {
+                        TimerUpdate();
+                        PendingRuns.Add(State.Run);
+                    }
                     State.Run = run;
                     return true;
                 }
                 catch (IndexOutOfRangeException)
                 {
+                    Debug.WriteLine("Error: tried to load splits file #"+i+" when there are only "+MultirunsSettings.rows + " avaiable.");
                     return false;
                 }
             }
