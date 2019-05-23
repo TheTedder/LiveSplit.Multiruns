@@ -14,17 +14,23 @@ namespace LiveSplit.Multiruns
 {
     public partial class MultirunsSettings : UserControl
     {
-        private bool On_private;
+        private bool On_private = false;
         public bool On {
             get
             {
                 return On_private;
             }
             set {
-                if (value && !On)
+                try{
+                    if (value && !On)
+                    {
+                        Comp.LoadSplits(0,false);
+                    }
+                } catch (NullReferenceException)
                 {
-                    Comp.LoadSplits(0);
+                    MessageBox.Show("You done fucked up A A Ron.");
                 }
+
                 On_private = value;
             }
         }
@@ -117,7 +123,7 @@ namespace LiveSplit.Multiruns
         {
             if (On)
             {
-                Comp.LoadSplits(0);
+                Comp.LoadSplits(0,false);
             }
         }
 
