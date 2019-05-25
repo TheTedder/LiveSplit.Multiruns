@@ -145,6 +145,10 @@ namespace LiveSplit.Multiruns
             {
                 Control c = flpSplits.Controls[row].Controls[1];
                 c.Text = ofdSplitsFile.FileName;
+                if (row == 0)
+                {
+                    Comp.LoadSplits(0);
+                }
             }
         }
 
