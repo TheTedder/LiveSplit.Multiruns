@@ -41,7 +41,7 @@ namespace LiveSplit.Multiruns
             if (Index > 0 && DoReset)
             {
                 SaveRuns();
-                State.Run = PendingRuns[0];
+                LoadSplits(0);
                 PendingRuns.Clear();
                 Index = 0;
                 DoReset = false;
