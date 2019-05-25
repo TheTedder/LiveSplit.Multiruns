@@ -22,7 +22,9 @@ namespace LiveSplit.Multiruns
         public readonly LiveSplitState State;
         private readonly TimerModel Timer;
         public int Index { get; private set; } = 0;
-        private bool DoReset = false;
+        private bool DoReset = true;
+        private bool DoStart = true;
+
         private List<IRun> PendingRuns;
 
         public MultirunsComponent(LiveSplitState s)
@@ -33,18 +35,39 @@ namespace LiveSplit.Multiruns
             Settings = new MultirunsSettings(this);
             State.OnSplit += State_OnSplit;
             State.OnReset += State_OnReset;
+            State.OnStart += State_OnStart;
             Settings[0] = State.Run.FilePath;
+        }
+
+        private void State_OnStart(object sender, EventArgs e)
+        {
+            if (DoStart)
+            {
+                SetButtons(false);
+            }
         }
 
         private void State_OnReset(object sender, TimerPhase value)
         {
-            if (Index > 0 && DoReset)
+            if (DoReset)
             {
-                SaveRuns();
-                LoadSplits(0);
-                PendingRuns.Clear();
-                Index = 0;
-                DoReset = false;
+                if (Index > 0)
+                {
+                    SaveRuns();
+                    LoadSplits(0);
+                    PendingRuns.Clear();
+                    Index = 0;
+                }
+
+                SetButtons(true);
+            }
+        }
+
+        private void SetButtons(bool v)
+        {
+            foreach (Control c in Settings.Clickables)
+            {
+                c.Enabled = v;
             }
         }
 
@@ -87,7 +110,10 @@ namespace LiveSplit.Multiruns
                     DoReset = false;
                     Timer.Reset();
                     DoReset = true;
+
+                    DoStart = false;
                     Timer.Start();
+                    DoStart = true;
                 }
             }
         }

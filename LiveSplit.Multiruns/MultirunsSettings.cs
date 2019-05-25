@@ -30,12 +30,14 @@ namespace LiveSplit.Multiruns
             }
         }
         private readonly MultirunsComponent Comp;
+        internal List<Control> Clickables;
         private int row;
         public const int rows = 4;
 
         public MultirunsSettings(MultirunsComponent mc)
         {
             InitializeComponent();
+            Clickables = new List<Control>((2 * rows) + 1) { chkEnable };
             Comp = mc;
 
             chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
@@ -62,9 +64,10 @@ namespace LiveSplit.Multiruns
                     Name = "btnOpen" + i.ToString(),
                     Size = new Size(52, 20),
                     TabIndex = 0,
-                    Text = "Open..."
+                    Text = "Open...",
                 };
                 bOpen.Click += BOpen_Click;
+                Clickables.Add(bOpen);
 
                 Button bClear = new Button()
                 {
@@ -77,6 +80,7 @@ namespace LiveSplit.Multiruns
                     Text = "Clear"
                 };
                 bClear.Click += BClear_Click;
+                Clickables.Add(bClear);
 
                 TextBox tb = new TextBox()
                 {
