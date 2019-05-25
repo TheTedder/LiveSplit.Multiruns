@@ -21,14 +21,9 @@ namespace LiveSplit.Multiruns
                 return On_private;
             }
             set {
-                try{
-                    if (value && !On)
-                    {
-                        Comp.LoadSplits(0,false);
-                    }
-                } catch (NullReferenceException)
+                if (value && !On)
                 {
-                    MessageBox.Show("You done fucked up A A Ron.");
+                    Comp.LoadSplits(0,false);
                 }
 
                 On_private = value;

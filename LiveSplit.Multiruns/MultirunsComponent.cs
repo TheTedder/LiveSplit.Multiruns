@@ -112,9 +112,9 @@ namespace LiveSplit.Multiruns
                     //    State.Run.AutoSplitter = AutoSplitterFactory.Instance.AutoSplitters[State.Run.GameName.ToLower()];
                     //}
                     //catch (KeyNotFoundException)
-                    //{
+                    {
                         State.Run.AutoSplitter = AutoSplitterFactory.Instance.Create(State.Run.GameName);
-                    //}
+                    }
                     
                     return true;
                 }
