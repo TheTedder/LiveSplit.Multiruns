@@ -114,6 +114,17 @@ namespace LiveSplit.Multiruns
             }
 
             gbSplits.PerformLayout();
+
+            flpSplits.Controls[0].Controls[1].TextChanged += Tb0_TextChanged;
+        }
+
+        private void Tb0_TextChanged(object sender, EventArgs e)
+        {
+            Control panel = ((Control)sender).Parent;
+            if (flpSplits.Controls.IndexOf(panel) == 0)
+            {
+                Comp.LoadSplits(0);
+            }
         }
 
         private void BClear_Click(object sender, EventArgs e)
@@ -149,15 +160,12 @@ namespace LiveSplit.Multiruns
             {
                 Control c = flpSplits.Controls[row].Controls[1];
                 c.Text = ofdSplitsFile.FileName;
-                if (row == 0)
-                {
-                    Comp.LoadSplits(0);
-                }
             }
         }
 
         public Stream Open(int i)
         {
+
             ofdSplitsFile.FileName = this[i];
             return ofdSplitsFile.OpenFile();
         }

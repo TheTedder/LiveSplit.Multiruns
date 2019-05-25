@@ -120,42 +120,48 @@ namespace LiveSplit.Multiruns
 
         public bool LoadSplits(int i, bool saveRun = false)
         {
-            if (!string.IsNullOrEmpty(Settings[i]))
+            var compgenfact = new StandardComparisonGeneratorsFactory();
+            try
             {
-                try
+                if (string.IsNullOrEmpty(Settings[i]))
                 {
-                    var compgenfact = new StandardComparisonGeneratorsFactory();
-                    var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
-                    var run = runfact.Create(compgenfact);
+                    var run = new Run(compgenfact)
+                    {
+                        GameName = "",
+                        CategoryName = ""
+                    };
+                    run.AddSegment("");
+
                     if (saveRun)
                     {
                         TimerUpdate();
                         PendingRuns.Add(State.Run);
                     }
                     State.Run = run;
-                    //try
-                    //{
-                    //    State.Run.AutoSplitter = AutoSplitterFactory.Instance.AutoSplitters[State.Run.GameName.ToLower()];
-                    //}
-                    //catch (KeyNotFoundException)
-                    {
-                        State.Run.AutoSplitter = AutoSplitterFactory.Instance.Create(State.Run.GameName);
-                    }
-                    
-                    return true;
                 }
-                catch (IndexOutOfRangeException)
+                else
                 {
-                    Debug.WriteLine("Error: tried to load splits file #"+i+" when there are only "+MultirunsSettings.rows + " avaiable.");
-                    return false;
+                    IRun run;
+                    var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
+                    run = runfact.Create(compgenfact);
+
+                    if (saveRun)
+                    {
+                        TimerUpdate();
+                        PendingRuns.Add(State.Run);
+                    }
+
+                    State.Run = run;
+                    State.Run.AutoSplitter = AutoSplitterFactory.Instance.Create(State.Run.GameName);
                 }
+                return true;
             }
-            else
+            catch (ArgumentOutOfRangeException)
             {
                 return false;
             }
         }
-
+            
         public override string ComponentName => "Multiruns";
 
         public override void Dispose()
