@@ -39,7 +39,7 @@ namespace LiveSplit.Multiruns
             Comp = mc;
 
             chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
-            diaSplitsFile.FileOk += DiaSplitsFile_FileOk;
+            ofdSplitsFile.FileOk += DiaSplitsFile_FileOk;
 
             Control[] controls = new Control[]
             {
@@ -104,22 +104,12 @@ namespace LiveSplit.Multiruns
                 flpSplits.Controls.Add(p);
             }
 
-            ((TextBox)flpSplits.Controls[0].Controls[1]).TextChanged += TbSplitsFile0_TextChanged;
-
             foreach (Control c in controls)
             {
                 c.ResumeLayout(false);
             }
 
             gbSplits.PerformLayout();
-        }
-
-        private void TbSplitsFile0_TextChanged(object sender, EventArgs e)
-        {
-            if (On)
-            {
-                Comp.LoadSplits(0,false);
-            }
         }
 
         private void BClear_Click(object sender, EventArgs e)
@@ -132,8 +122,8 @@ namespace LiveSplit.Multiruns
         {
             Control panel = ((Control)sender).Parent;
             row = flpSplits.Controls.GetChildIndex(panel);
-            diaSplitsFile.FileName = this[row];
-            diaSplitsFile.ShowDialog();
+            ofdSplitsFile.FileName = this[row];
+            ofdSplitsFile.ShowDialog();
         }
 
         public string this[int i] {
@@ -154,14 +144,14 @@ namespace LiveSplit.Multiruns
             if (!e.Cancel)
             {
                 Control c = flpSplits.Controls[row].Controls[1];
-                c.Text = diaSplitsFile.FileName;
+                c.Text = ofdSplitsFile.FileName;
             }
         }
 
         public Stream Open(int i)
         {
-            diaSplitsFile.FileName = this[i];
-            return diaSplitsFile.OpenFile();
+            ofdSplitsFile.FileName = this[i];
+            return ofdSplitsFile.OpenFile();
         }
 
         public Stream Save(int i)

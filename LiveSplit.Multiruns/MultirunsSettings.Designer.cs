@@ -32,7 +32,7 @@
             this.gbSplits = new System.Windows.Forms.GroupBox();
             this.flpSplits = new System.Windows.Forms.FlowLayoutPanel();
             this.chkEnable = new System.Windows.Forms.CheckBox();
-            this.diaSplitsFile = new System.Windows.Forms.OpenFileDialog();
+            this.ofdSplitsFile = new System.Windows.Forms.OpenFileDialog();
             this.sfdSplitsFile = new System.Windows.Forms.SaveFileDialog();
             panel1 = new System.Windows.Forms.Panel();
             panel1.SuspendLayout();
@@ -81,9 +81,9 @@
             this.chkEnable.Text = "enable";
             this.chkEnable.UseVisualStyleBackColor = true;
             // 
-            // diaSplitsFile
+            // ofdSplitsFile
             // 
-            this.diaSplitsFile.Filter = "Splits Files (*.lss)|*.lss";
+            this.ofdSplitsFile.Filter = "Splits Files (*.lss)|*.lss";
             // 
             // sfdSplitsFile
             // 
@@ -107,7 +107,7 @@
         #endregion
 
         private System.Windows.Forms.CheckBox chkEnable;
-        private System.Windows.Forms.OpenFileDialog diaSplitsFile;
+        private System.Windows.Forms.OpenFileDialog ofdSplitsFile;
         private System.Windows.Forms.GroupBox gbSplits;
         private System.Windows.Forms.FlowLayoutPanel flpSplits;
         private System.Windows.Forms.SaveFileDialog sfdSplitsFile;
