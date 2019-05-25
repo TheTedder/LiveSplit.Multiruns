@@ -107,21 +107,14 @@ namespace LiveSplit.Multiruns
                         PendingRuns.Add(State.Run);
                     }
                     State.Run = run;
-                    //hacky
-                    State.Run.GameName = State.Run.GameName;
-                    State.CallRunManuallyModified();
-                    try
-                    {
-                        State.Run.AutoSplitter = AutoSplitterFactory.Instance.AutoSplitters[State.Run.GameName];
-                    }
-                    catch (KeyNotFoundException)
-                    {
+                    //try
+                    //{
+                    //    State.Run.AutoSplitter = AutoSplitterFactory.Instance.AutoSplitters[State.Run.GameName.ToLower()];
+                    //}
+                    //catch (KeyNotFoundException)
+                    //{
                         State.Run.AutoSplitter = AutoSplitterFactory.Instance.Create(State.Run.GameName);
-                    }
-                    finally
-                    {
-                        State.Run.AutoSplitter.Activate(State);
-                    }
+                    //}
                     
                     return true;
                 }
