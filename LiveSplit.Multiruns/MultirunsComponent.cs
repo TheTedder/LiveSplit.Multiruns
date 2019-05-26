@@ -29,7 +29,7 @@ namespace LiveSplit.Multiruns
 
         public MultirunsComponent(LiveSplitState s)
         {
-            PendingRuns = new List<IRun>(MultirunsSettings.rows);
+            PendingRuns = new List<IRun>();
             State = s;
             Timer = new TimerModel { CurrentState = State };
             Settings = new MultirunsSettings(this);
@@ -168,6 +168,7 @@ namespace LiveSplit.Multiruns
         {
             State.OnSplit -= State_OnSplit;
             State.OnReset -= State_OnReset;
+            State.OnStart -= State_OnStart;
         }
 
         public override XmlNode GetSettings(XmlDocument document)
@@ -177,7 +178,7 @@ namespace LiveSplit.Multiruns
             elem.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
             var splitsElem = elem.AppendChild(document.CreateElement("Splits"));
 
-            for (int i = 0; i < MultirunsSettings.rows; i++)
+            for (int i = 0; i < Settings.Count; i++)
             {
                 var splitElem = (XmlElement)splitsElem.AppendChild(document.CreateElement("File"));
                 if (!string.IsNullOrEmpty(Settings[i])){
@@ -188,7 +189,7 @@ namespace LiveSplit.Multiruns
             return elem;
         }
 
-        public override System.Windows.Forms.Control GetSettingsControl(LayoutMode mode)
+        public override Control GetSettingsControl(LayoutMode mode)
         {
             return Settings;
         }
@@ -201,9 +202,17 @@ namespace LiveSplit.Multiruns
 
             if (splitsElem != null)
             {
-                for (int i = 0; i < MultirunsSettings.rows; i++)
+                for (int i = 0; i < splitsElem.ChildNodes.Count; i++)
                 {
-                    Settings[i] = SettingsHelper.ParseString((XmlElement)splitsElem.ChildNodes.Item(i), string.Empty);
+                    string str = SettingsHelper.ParseString((XmlElement)splitsElem.ChildNodes.Item(i), string.Empty);
+                    try
+                    {
+                        Settings[i] = str;
+                    }
+                    catch (ArgumentOutOfRangeException)
+                    {
+                        Settings.Add(str);
+                    }
                 }
             }
         }

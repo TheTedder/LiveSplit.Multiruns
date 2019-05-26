@@ -31,97 +31,168 @@ namespace LiveSplit.Multiruns
         }
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
+        private List<Control> Suspendibles;
         private int row;
-        public const int rows = 4;
+        public int Count => flpSplits.Controls.Count;
 
         public MultirunsSettings(MultirunsComponent mc)
         {
             InitializeComponent();
-            Clickables = new List<Control>((2 * rows) + 1) { chkEnable };
+            Clickables = new List<Control>() { chkEnable, btnAdd };
+            Suspendibles = new List<Control>(3)
+            {
+                gbSplits, this
+            };
             Comp = mc;
 
             chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
             ofdSplitsFile.FileOk += DiaSplitsFile_FileOk;
-
-            Control[] controls = new Control[]
-            {
-                gbSplits, flpSplits, this
-            };
-
-            foreach (Control c in controls)
-            {
-                c.SuspendLayout();
-            }
-
-            for (int i = 0; i < rows; i++)
-            {
-                Button bOpen = new Button()
-                {
-                    AutoSize = true,
-                    AutoSizeMode = AutoSizeMode.GrowOnly,
-                    Dock = DockStyle.Left,
-                    Location = new Point(0, 0),
-                    Name = "btnOpen" + i.ToString(),
-                    Size = new Size(52, 20),
-                    TabIndex = 0,
-                    Text = "Open...",
-                };
-                bOpen.Click += BOpen_Click;
-                Clickables.Add(bOpen);
-
-                Button bClear = new Button()
-                {
-                    AutoSize = true,
-                    AutoSizeMode = AutoSizeMode.GrowOnly,
-                    Dock = DockStyle.Right,
-                    Name = "btnClear" + i.ToString(),
-                    Size = new Size(52, 20),
-                    TabIndex = 1,
-                    Text = "Clear"
-                };
-                bClear.Click += BClear_Click;
-                Clickables.Add(bClear);
-
-                TextBox tb = new TextBox()
-                {
-                    Dock = DockStyle.None,
-                    Enabled = false,
-                    Location = new Point(52, 0),
-                    Name = "tbSplitsFile"+ i.ToString(),
-                    Size = new Size(328, 20),
-                    WordWrap = false,
-                    Text = ""
-                };
-
-                Panel p = new Panel();
-                p.SuspendLayout();    
-                p.AutoSizeMode = AutoSizeMode.GrowAndShrink;    
-                p.Location = new Point(3, (23 * i) + 3);    
-                p.Name = "pSplitsFile" + i.ToString();    
-                p.Size = new Size(432, 20);    
-                p.TabIndex = i;    
-                p.Controls.Add(bOpen);
-                p.Controls.Add(tb);
-                p.Controls.Add(bClear);
-                p.ResumeLayout(false);
-                p.PerformLayout();    
-                flpSplits.Controls.Add(p);
-            }
-
-            foreach (Control c in controls)
-            {
-                c.ResumeLayout(false);
-            }
-
-            gbSplits.PerformLayout();
+            btnAdd.Click += (dingus,bingus) => Add();
+            Add();
 
             flpSplits.Controls[0].Controls[1].TextChanged += Tb0_TextChanged;
         }
 
+        public bool RemoveAt(int i)
+        {
+            foreach (Control c in Suspendibles)
+            {
+                c.SuspendLayout();
+            }
+
+            if (i == 0 || i >= Count)
+            {
+                return false;
+            }
+
+            var Skippables = new List<Control>(Clickables.Skip(2)?.Where(control => IndexOf(control) == i));
+            foreach(Control control in Skippables)
+            {
+                Clickables.Remove(control);
+            }
+
+            foreach (Control control in flpSplits.Controls[i].Controls)
+            {
+                flpSplits.Controls[i].Controls.Clear();
+                control.Dispose();
+            }
+
+            Control panel = flpSplits.Controls[i];
+            flpSplits.Controls.RemoveAt(i);
+            panel.Dispose();
+
+            foreach (Control c in Suspendibles)
+            {
+                c.ResumeLayout(true);
+            }
+            gbSplits.PerformLayout();
+
+            return true;
+        }
+
+        private int IndexOf(Control control) => flpSplits.Controls.IndexOf(control.Parent);
+
+        public void Add(string text = "")
+        {
+            foreach (Control c in Suspendibles)
+            {
+                c.SuspendLayout();
+            }
+
+            bool first = Count == 0;
+
+            Button bOpen = new Button()
+            {
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowOnly,
+                Dock = DockStyle.Left,
+                Location = new Point(0, 0),
+                Name = "btnOpen",
+                Size = new Size(52, 20),
+                TabIndex = 0,
+                Text = "Open...",
+            };
+            bOpen.Click += BOpen_Click;
+            Clickables.Add(bOpen);
+
+            Button bClear = new Button()
+            {
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowOnly,
+                Dock = DockStyle.Right,
+                Name = "btnClear",
+                Size = new Size(52, 20),
+                TabIndex = 1,
+                Text = "Clear"
+            };
+            bClear.Click += BClear_Click;
+            Clickables.Add(bClear);
+
+            TextBox tb = new TextBox()
+            {
+                Dock = DockStyle.None,
+                Location = new Point(52, 0),
+                Name = "tbSplitsFile",
+                Size = new Size(242, 20),
+                WordWrap = false,
+                Text = text,
+                ReadOnly = true
+            };
+            if (first)
+            {
+                tb.Size = new Size(242 + 52 + 6, 20);
+            }
+
+            
+            Button bRemove = new Button();
+            if (!first)
+            {
+                bRemove = new Button()
+                {
+                    AutoSize = true,
+                    AutoSizeMode = AutoSizeMode.GrowOnly,
+                    Dock = DockStyle.Right,
+                    Name = "btnRemove",
+                    Size = new Size(52, 20),
+                    TabIndex = 2,
+                    Text = "Remove"
+                };
+                bRemove.Click += BRemove_Click;
+                Clickables.Add(bRemove);
+            }
+
+            Panel p = new Panel();
+            p.SuspendLayout();
+            p.AutoSizeMode = AutoSizeMode.GrowAndShrink;
+            p.Name = "pSplitsFile";
+            p.Size = new Size(429 - (6+17), 20);
+            p.TabIndex = Count;
+            p.Controls.Add(bOpen);
+            p.Controls.Add(tb);
+            p.Controls.Add(bClear);
+            if (!first)
+            {
+                p.Controls.Add(bRemove);
+            }
+            p.ResumeLayout(false);
+            p.PerformLayout();
+            flpSplits.Controls.Add(p);
+
+            foreach (Control c in Suspendibles)
+            {
+                c.ResumeLayout(true);
+            }
+            gbSplits.PerformLayout();
+        }
+
+        private void BRemove_Click(object sender, EventArgs e)
+        {
+            RemoveAt(IndexOf((Control)sender));
+        }
+
         private void Tb0_TextChanged(object sender, EventArgs e)
         {
-            Control panel = ((Control)sender).Parent;
-            if (flpSplits.Controls.IndexOf(panel) == 0)
+            if (IndexOf((Control)sender) == 0)
             {
                 Comp.LoadSplits(0);
             }
@@ -135,8 +206,7 @@ namespace LiveSplit.Multiruns
 
         private void BOpen_Click(object sender, EventArgs e)
         {
-            Control panel = ((Control)sender).Parent;
-            row = flpSplits.Controls.GetChildIndex(panel);
+            row = IndexOf((Control)sender);
             ofdSplitsFile.FileName = this[row];
             ofdSplitsFile.ShowDialog();
         }
