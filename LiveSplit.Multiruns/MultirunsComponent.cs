@@ -111,11 +111,12 @@ namespace LiveSplit.Multiruns
                     Timer.Reset();
                     DoReset = true;
 
-                    if (Settings.Autostart)
+                    DoStart = false;
+                    Timer.Start();
+                    DoStart = true;
+                    if (!Settings.Autostart)
                     {
-                        DoStart = false;
-                        Timer.Start();
-                        DoStart = true;
+                        Timer.Pause();
                     }
                 }
             }
