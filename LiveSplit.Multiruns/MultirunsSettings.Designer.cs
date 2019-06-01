@@ -50,7 +50,7 @@
             panel1.Location = new System.Drawing.Point(0, 0);
             panel1.Name = "panel1";
             panel1.Padding = new System.Windows.Forms.Padding(3);
-            panel1.Size = new System.Drawing.Size(450, 300);
+            panel1.Size = new System.Drawing.Size(476, 300);
             panel1.TabIndex = 1;
             // 
             // chkAutostart
@@ -71,7 +71,7 @@
             this.gbSplits.Controls.Add(this.btnAdd);
             this.gbSplits.Location = new System.Drawing.Point(6, 52);
             this.gbSplits.Name = "gbSplits";
-            this.gbSplits.Size = new System.Drawing.Size(438, 242);
+            this.gbSplits.Size = new System.Drawing.Size(464, 242);
             this.gbSplits.TabIndex = 4;
             this.gbSplits.TabStop = false;
             this.gbSplits.Text = "Splits";
@@ -82,7 +82,7 @@
             this.flpSplits.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flpSplits.Location = new System.Drawing.Point(9, 19);
             this.flpSplits.Name = "flpSplits";
-            this.flpSplits.Size = new System.Drawing.Size(423, 188);
+            this.flpSplits.Size = new System.Drawing.Size(449, 188);
             this.flpSplits.TabIndex = 5;
             this.flpSplits.WrapContents = false;
             // 
@@ -119,7 +119,7 @@
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(panel1);
             this.Name = "MultirunsSettings";
-            this.Size = new System.Drawing.Size(450, 300);
+            this.Size = new System.Drawing.Size(476, 300);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             this.gbSplits.ResumeLayout(false);

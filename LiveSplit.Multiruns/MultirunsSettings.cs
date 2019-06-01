@@ -135,14 +135,14 @@ namespace LiveSplit.Multiruns
                 Dock = DockStyle.None,
                 Location = new Point(53, 0),
                 Name = "tbSplitsFile",
-                Size = new Size(242-5, 20),
+                Size = new Size(269, 20),
                 WordWrap = false,
                 Text = text,
                 ReadOnly = true
             };
             if (first)
             {
-                tb.Size = new Size(242 + 52, 20);
+                tb.Size = new Size(326, 20);
             }
 
             
@@ -167,7 +167,7 @@ namespace LiveSplit.Multiruns
             p.SuspendLayout();
             p.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             p.Name = "pSplitsFile";
-            p.Size = new Size(429 - (6+17) - 6, 20);
+            p.Size = new Size(432, 20);
             p.TabIndex = Count;
             p.Controls.Add(bOpen);
             p.Controls.Add(tb);
