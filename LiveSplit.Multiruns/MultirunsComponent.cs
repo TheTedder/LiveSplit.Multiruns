@@ -111,9 +111,12 @@ namespace LiveSplit.Multiruns
                     Timer.Reset();
                     DoReset = true;
 
-                    DoStart = false;
-                    Timer.Start();
-                    DoStart = true;
+                    if (Settings.Autostart)
+                    {
+                        DoStart = false;
+                        Timer.Start();
+                        DoStart = true;
+                    }
                 }
             }
         }
@@ -123,6 +126,7 @@ namespace LiveSplit.Multiruns
             var compgenfact = new StandardComparisonGeneratorsFactory();
             try
             {
+
                 if (string.IsNullOrEmpty(Settings[i]))
                 {
                     var run = new Run(compgenfact)
@@ -176,6 +180,7 @@ namespace LiveSplit.Multiruns
             XmlElement elem = document.CreateElement("Settings");
             elem.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
             elem.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
+            elem.AppendChild(SettingsHelper.ToElement(document, "Autostart", Settings.Autostart));
             var splitsElem = elem.AppendChild(document.CreateElement("Splits"));
 
             for (int i = 0; i < Settings.Count; i++)
@@ -198,6 +203,7 @@ namespace LiveSplit.Multiruns
         {
             var elem = (XmlElement) settings;
             Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
+            Settings.Autostart = SettingsHelper.ParseBool(elem["Autostart"], true);
             var splitsElem = elem["Splits"];
 
             if (splitsElem != null)

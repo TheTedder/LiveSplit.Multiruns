@@ -9,6 +9,7 @@ using System.Threading.Tasks;
 using System.Windows.Forms;
 using LiveSplit.UI.Components;
 using System.IO;
+using System.Reflection;
 
 namespace LiveSplit.Multiruns
 {
@@ -29,6 +30,7 @@ namespace LiveSplit.Multiruns
                 On_private = value;
             }
         }
+        public bool Autostart { get; set; }
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
         private List<Control> Suspendibles;
@@ -38,7 +40,7 @@ namespace LiveSplit.Multiruns
         public MultirunsSettings(MultirunsComponent mc)
         {
             InitializeComponent();
-            Clickables = new List<Control>() { chkEnable, btnAdd };
+            Clickables = new List<Control>() { chkEnable, btnAdd, chkAutostart };
             Suspendibles = new List<Control>(3)
             {
                 gbSplits, this
@@ -46,6 +48,7 @@ namespace LiveSplit.Multiruns
             Comp = mc;
 
             chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
+            chkAutostart.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(Autostart), false, DataSourceUpdateMode.OnPropertyChanged);
             ofdSplitsFile.FileOk += DiaSplitsFile_FileOk;
             btnAdd.Click += (dingus,bingus) => Add();
             Add();
@@ -65,8 +68,7 @@ namespace LiveSplit.Multiruns
                 return false;
             }
 
-            var Skippables = new List<Control>(Clickables.Skip(2)?.Where(control => IndexOf(control) == i));
-            foreach(Control control in Skippables)
+            foreach(Control control in new List<Control>(Clickables.Skip(3)?.Where(c => IndexOf(c) == i)))
             {
                 Clickables.Remove(control);
             }
@@ -133,14 +135,14 @@ namespace LiveSplit.Multiruns
                 Dock = DockStyle.None,
                 Location = new Point(52, 0),
                 Name = "tbSplitsFile",
-                Size = new Size(242, 20),
+                Size = new Size(242-4, 20),
                 WordWrap = false,
                 Text = text,
                 ReadOnly = true
             };
             if (first)
             {
-                tb.Size = new Size(242 + 52 + 6, 20);
+                tb.Size = new Size(242 + 52, 20);
             }
 
             
@@ -165,7 +167,7 @@ namespace LiveSplit.Multiruns
             p.SuspendLayout();
             p.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             p.Name = "pSplitsFile";
-            p.Size = new Size(429 - (6+17), 20);
+            p.Size = new Size(429 - (6+17) - 6, 20);
             p.TabIndex = Count;
             p.Controls.Add(bOpen);
             p.Controls.Add(tb);

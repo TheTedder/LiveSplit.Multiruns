@@ -29,6 +29,7 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Panel panel1;
+            this.chkAutostart = new System.Windows.Forms.CheckBox();
             this.gbSplits = new System.Windows.Forms.GroupBox();
             this.flpSplits = new System.Windows.Forms.FlowLayoutPanel();
             this.btnAdd = new System.Windows.Forms.Button();
@@ -42,6 +43,7 @@
             // 
             // panel1
             // 
+            panel1.Controls.Add(this.chkAutostart);
             panel1.Controls.Add(this.gbSplits);
             panel1.Controls.Add(this.chkEnable);
             panel1.Dock = System.Windows.Forms.DockStyle.Fill;
@@ -51,14 +53,25 @@
             panel1.Size = new System.Drawing.Size(450, 300);
             panel1.TabIndex = 1;
             // 
+            // chkAutostart
+            // 
+            this.chkAutostart.AutoSize = true;
+            this.chkAutostart.Checked = true;
+            this.chkAutostart.CheckState = System.Windows.Forms.CheckState.Checked;
+            this.chkAutostart.Location = new System.Drawing.Point(6, 29);
+            this.chkAutostart.Name = "chkAutostart";
+            this.chkAutostart.Size = new System.Drawing.Size(68, 17);
+            this.chkAutostart.TabIndex = 5;
+            this.chkAutostart.Text = "Autostart";
+            this.chkAutostart.UseVisualStyleBackColor = true;
+            // 
             // gbSplits
             // 
             this.gbSplits.Controls.Add(this.flpSplits);
             this.gbSplits.Controls.Add(this.btnAdd);
-            this.gbSplits.Dock = System.Windows.Forms.DockStyle.Fill;
-            this.gbSplits.Location = new System.Drawing.Point(3, 26);
+            this.gbSplits.Location = new System.Drawing.Point(6, 52);
             this.gbSplits.Name = "gbSplits";
-            this.gbSplits.Size = new System.Drawing.Size(444, 271);
+            this.gbSplits.Size = new System.Drawing.Size(438, 242);
             this.gbSplits.TabIndex = 4;
             this.gbSplits.TabStop = false;
             this.gbSplits.Text = "Splits";
@@ -69,13 +82,13 @@
             this.flpSplits.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
             this.flpSplits.Location = new System.Drawing.Point(9, 19);
             this.flpSplits.Name = "flpSplits";
-            this.flpSplits.Size = new System.Drawing.Size(429, 217);
+            this.flpSplits.Size = new System.Drawing.Size(423, 188);
             this.flpSplits.TabIndex = 5;
             this.flpSplits.WrapContents = false;
             // 
             // btnAdd
             // 
-            this.btnAdd.Location = new System.Drawing.Point(9, 242);
+            this.btnAdd.Location = new System.Drawing.Point(6, 213);
             this.btnAdd.Name = "btnAdd";
             this.btnAdd.Size = new System.Drawing.Size(45, 23);
             this.btnAdd.TabIndex = 0;
@@ -85,13 +98,11 @@
             // chkEnable
             // 
             this.chkEnable.AutoSize = true;
-            this.chkEnable.Dock = System.Windows.Forms.DockStyle.Top;
-            this.chkEnable.Location = new System.Drawing.Point(3, 3);
+            this.chkEnable.Location = new System.Drawing.Point(6, 6);
             this.chkEnable.Name = "chkEnable";
-            this.chkEnable.Padding = new System.Windows.Forms.Padding(3);
-            this.chkEnable.Size = new System.Drawing.Size(444, 23);
+            this.chkEnable.Size = new System.Drawing.Size(59, 17);
             this.chkEnable.TabIndex = 0;
-            this.chkEnable.Text = "enable";
+            this.chkEnable.Text = "Enable";
             this.chkEnable.UseVisualStyleBackColor = true;
             // 
             // ofdSplitsFile
@@ -124,5 +135,6 @@
         private System.Windows.Forms.FlowLayoutPanel flpSplits;
         private System.Windows.Forms.SaveFileDialog sfdSplitsFile;
         private System.Windows.Forms.Button btnAdd;
+        private System.Windows.Forms.CheckBox chkAutostart;
     }
 }
