@@ -133,9 +133,9 @@ namespace LiveSplit.Multiruns
             TextBox tb = new TextBox()
             {
                 Dock = DockStyle.None,
-                Location = new Point(52, 0),
+                Location = new Point(53, 0),
                 Name = "tbSplitsFile",
-                Size = new Size(242-4, 20),
+                Size = new Size(242-5, 20),
                 WordWrap = false,
                 Text = text,
                 ReadOnly = true
