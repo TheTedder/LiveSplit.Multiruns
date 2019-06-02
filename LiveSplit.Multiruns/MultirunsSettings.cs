@@ -66,7 +66,8 @@ namespace LiveSplit.Multiruns
                 return false;
             }
 
-            foreach(Control control in new List<Control>(Clickables.Skip(3)?.Where(c => IndexOf(c) == i)))
+            //use ToArray() to avoid modifying Clickables during iteration
+            foreach(Control control in Clickables.Skip(3)?.Where(c => IndexOf(c) == i).ToArray())
             {
                 Clickables.Remove(control);
             }
@@ -137,7 +138,7 @@ namespace LiveSplit.Multiruns
                 Dock = DockStyle.None,
                 Location = new Point(53, 0),
                 Name = "tbSplitsFile",
-                Size = new Size(269, 20),
+                Size = new Size(266, 20),
                 WordWrap = false,
                 Text = text,
                 ReadOnly = true
@@ -161,7 +162,7 @@ namespace LiveSplit.Multiruns
             p.SuspendLayout();
             p.AutoSizeMode = AutoSizeMode.GrowAndShrink;
             p.Name = "pSplitsFile";
-            p.Size = new Size(432, 20);
+            p.Size = new Size(429, 20);
             p.TabIndex = Count;
             p.Controls.Add(bOpen);
             p.Controls.Add(tb);

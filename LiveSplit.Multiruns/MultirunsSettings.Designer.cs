@@ -80,9 +80,9 @@
             // 
             this.flpSplits.AutoScroll = true;
             this.flpSplits.FlowDirection = System.Windows.Forms.FlowDirection.TopDown;
-            this.flpSplits.Location = new System.Drawing.Point(9, 19);
+            this.flpSplits.Location = new System.Drawing.Point(6, 19);
             this.flpSplits.Name = "flpSplits";
-            this.flpSplits.Size = new System.Drawing.Size(449, 188);
+            this.flpSplits.Size = new System.Drawing.Size(452, 188);
             this.flpSplits.TabIndex = 5;
             this.flpSplits.WrapContents = false;
             // 
