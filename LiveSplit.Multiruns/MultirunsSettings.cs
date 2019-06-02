@@ -66,12 +66,6 @@ namespace LiveSplit.Multiruns
                 return false;
             }
 
-            if (Count <= 1)
-            {
-                MessageBox.Show(TopLevelControl,"You can't remove the last splits file.", "Livesplit",MessageBoxButtons.OK,MessageBoxIcon.Error);
-                return false;
-            }
-
             //use ToArray() to avoid modifying Clickables during iteration
             foreach(Control control in Clickables.Skip(3)?.Where(c => IndexOf(c) == i).ToArray())
             {
@@ -100,6 +94,11 @@ namespace LiveSplit.Multiruns
                 flpSplits.Controls[0].Controls["tbSplitsFile"].TextChanged += Tb0_TextChanged;
             }
 
+            if(Count == 1)
+            {
+                flpSplits.Controls[0].Controls["btnRemove"].Enabled = false;
+            }
+
             return true;
         }
 
@@ -107,6 +106,11 @@ namespace LiveSplit.Multiruns
 
         public void Add(string text = "")
         {
+            if(Count == 1)
+            {
+                flpSplits.Controls[0].Controls["btnRemove"].Enabled = true;
+            }
+
             foreach (Control c in Suspendibles)
             {
                 c.SuspendLayout();
