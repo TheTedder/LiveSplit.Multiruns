@@ -41,9 +41,60 @@ namespace LiveSplit.Multiruns
 
         private void State_OnStart(object sender, EventArgs e)
         {
-            if (DoStart)
+            if (DoStart && Settings.On)
             {
-                SetButtons(false);
+                Timer.Pause();
+                var hasSubsplits = false;
+                for (int i = 0; i < Settings.Count; i++)
+                {
+                    try
+                    {
+                        IRun run;
+                        if (i != Index)
+                        {
+                            var compgentfact = new StandardComparisonGeneratorsFactory();
+                            var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
+                            run = runfact.Create(compgentfact);
+                        }
+                        else
+                        {
+                            run = State.Run;
+                        }
+
+                        if (run.Count(iseg => iseg.Name[0] == '-') > 0)
+                        {
+                            hasSubsplits = true;
+                        }
+                    }
+                    catch (ArgumentNullException) { }
+                }
+
+                if (hasSubsplits)
+                {
+                    switch( MessageBox.Show(State.Form.TopLevelControl,
+                        "Warning: one or more of the files specified uses subsplits.\n" +
+                        "This may cause unexpected behavior.",
+                        "Livesplit",
+                        MessageBoxButtons.AbortRetryIgnore,
+                        MessageBoxIcon.Error))
+                    {
+                        case DialogResult.Abort:
+                            Timer.Reset();
+                            break;
+                        case DialogResult.Retry:
+                            Timer.Reset();
+                            Timer.Start();
+                            break;
+                        case DialogResult.Ignore:
+                            Timer.UndoAllPauses();
+                            break;
+                    }
+                }
+                else
+                {
+                    SetButtons(false);
+                    Timer.UndoAllPauses();
+                }
             }
         }
 
