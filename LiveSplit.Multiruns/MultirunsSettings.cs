@@ -54,7 +54,7 @@ namespace LiveSplit.Multiruns
             flpSplits.Controls[0].Controls["tbSplitsFile"].TextChanged += Tb0_TextChanged;
         }
 
-        public bool RemoveAt(int i)
+        private bool RemoveAt(int i)
         {
             foreach (Control c in Suspendibles)
             {
