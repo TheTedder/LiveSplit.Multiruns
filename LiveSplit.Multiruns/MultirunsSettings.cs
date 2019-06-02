@@ -61,7 +61,7 @@ namespace LiveSplit.Multiruns
                 c.SuspendLayout();
             }
 
-            if (i == 0 || i >= Count)
+            if (i >= Count || Count <= 1)
             {
                 return false;
             }
@@ -87,6 +87,12 @@ namespace LiveSplit.Multiruns
             }
             gbSplits.PerformLayout();
 
+            if (i == 0)
+            {
+                Comp.LoadSplits(0);
+                flpSplits.Controls[0].Controls["tbSplitsFile"].TextChanged += Tb0_TextChanged;
+            }
+
             return true;
         }
 
@@ -98,8 +104,6 @@ namespace LiveSplit.Multiruns
             {
                 c.SuspendLayout();
             }
-
-            bool first = Count == 0;
 
             Button bOpen = new Button()
             {
@@ -138,28 +142,20 @@ namespace LiveSplit.Multiruns
                 Text = text,
                 ReadOnly = true
             };
-            if (first)
-            {
-                tb.Size = new Size(326, 20);
-            }
-
             
             Button bRemove = new Button();
-            if (!first)
+            bRemove = new Button()
             {
-                bRemove = new Button()
-                {
-                    AutoSize = true,
-                    AutoSizeMode = AutoSizeMode.GrowOnly,
-                    Dock = DockStyle.Right,
-                    Name = "btnRemove",
-                    Size = new Size(52, 20),
-                    TabIndex = 2,
-                    Text = "Remove"
-                };
-                bRemove.Click += BRemove_Click;
-                Clickables.Add(bRemove);
-            }
+                AutoSize = true,
+                AutoSizeMode = AutoSizeMode.GrowOnly,
+                Dock = DockStyle.Right,
+                Name = "btnRemove",
+                Size = new Size(52, 20),
+                TabIndex = 2,
+                Text = "Remove"
+            };
+            bRemove.Click += BRemove_Click;
+            Clickables.Add(bRemove);
 
             Panel p = new Panel();
             p.SuspendLayout();
@@ -170,10 +166,7 @@ namespace LiveSplit.Multiruns
             p.Controls.Add(bOpen);
             p.Controls.Add(tb);
             p.Controls.Add(bClear);
-            if (!first)
-            {
-                p.Controls.Add(bRemove);
-            }
+            p.Controls.Add(bRemove);
             p.ResumeLayout(false);
             p.PerformLayout();
             flpSplits.Controls.Add(p);
