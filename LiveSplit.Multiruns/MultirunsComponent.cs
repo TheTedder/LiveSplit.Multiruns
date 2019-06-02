@@ -195,10 +195,7 @@ namespace LiveSplit.Multiruns
             return elem;
         }
 
-        public override Control GetSettingsControl(LayoutMode mode)
-        {
-            return Settings;
-        }
+        public override Control GetSettingsControl(LayoutMode mode) => Settings;
 
         public override void SetSettings(XmlNode settings)
         {
