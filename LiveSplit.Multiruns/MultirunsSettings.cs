@@ -101,6 +101,7 @@ namespace LiveSplit.Multiruns
             if(Count == 1)
             {
                 flpSplits.Controls[0].Controls["btnRemove"].Enabled = false;
+                Clickables.Remove(flpSplits.Controls[0].Controls["btnRemove"]);
             }
 
             return true;
@@ -110,9 +111,11 @@ namespace LiveSplit.Multiruns
 
         public void Add(string text = "")
         {
+            bool first = Count == 0;
             if(Count == 1)
             {
                 flpSplits.Controls[0].Controls["btnRemove"].Enabled = true;
+                Clickables.Add(flpSplits.Controls[0].Controls["btnRemove"]);
             }
 
             foreach (Control c in Suspendibles)
@@ -170,7 +173,14 @@ namespace LiveSplit.Multiruns
                 Text = "Remove"
             };
             bRemove.Click += BRemove_Click;
-            Clickables.Add(bRemove);
+            if (first)
+            {
+                bRemove.Enabled = false;
+            }
+            else
+            {
+                Clickables.Add(bRemove);
+            }
 
             Panel p = new Panel();
             p.SuspendLayout();
