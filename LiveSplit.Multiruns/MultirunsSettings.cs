@@ -51,7 +51,7 @@ namespace LiveSplit.Multiruns
             btnAdd.Click += (dingus,bingus) => Add();
             Add();
 
-            flpSplits.Controls[0].Controls[1].TextChanged += Tb0_TextChanged;
+            flpSplits.Controls[0].Controls["tbSplitsFile"].TextChanged += Tb0_TextChanged;
         }
 
         public bool RemoveAt(int i)
@@ -194,7 +194,7 @@ namespace LiveSplit.Multiruns
         private void BClear_Click(object sender, EventArgs e)
         {
             Control panel = ((Control)sender).Parent;
-            panel.Controls[1].Text = "";
+            panel.Controls["tbSplitsFile"].Text = "";
         }
 
         private void BOpen_Click(object sender, EventArgs e)
@@ -207,12 +207,12 @@ namespace LiveSplit.Multiruns
         public string this[int i] {
             get
             {
-                return flpSplits.Controls[i].Controls[1].Text;
+                return flpSplits.Controls[i].Controls["tbSplitsFile"].Text;
             }
             set
             {
-                if (flpSplits.Controls[i].Controls[1].Text != value) {
-                    flpSplits.Controls[i].Controls[1].Text = value;
+                if (flpSplits.Controls[i].Controls["tbSplitsFile"].Text != value) {
+                    flpSplits.Controls[i].Controls["tbSplitsFile"].Text = value;
                 }
             }
         }
@@ -221,7 +221,7 @@ namespace LiveSplit.Multiruns
         {
             if (!e.Cancel)
             {
-                Control c = flpSplits.Controls[row].Controls[1];
+                Control c = flpSplits.Controls[row].Controls["tbSplitsFile"];
                 c.Text = ofdSplitsFile.FileName;
             }
         }
