@@ -75,7 +75,7 @@ namespace LiveSplit.Multiruns
         {
             if(PendingRuns.Count > 0)
             {
-                var owner = (IWin32Window)State.Form.GetContainerControl();
+                var owner = (IWin32Window)State.Form.TopLevelControl;
                 var runsaver = new XMLRunSaver();
                 for (int i = 0; i < PendingRuns.Count; i++)
                 {
