@@ -186,10 +186,7 @@ namespace LiveSplit.Multiruns
 
         private void Tb0_TextChanged(object sender, EventArgs e)
         {
-            if (IndexOf((Control)sender) == 0)
-            {
-                Comp.LoadSplits(0);
-            }
+            Comp.LoadSplits(0);
         }
 
         private void BClear_Click(object sender, EventArgs e)
