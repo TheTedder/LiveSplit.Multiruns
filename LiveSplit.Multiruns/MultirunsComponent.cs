@@ -106,7 +106,7 @@ namespace LiveSplit.Multiruns
             {
                 Index++;
 
-                if (LoadSplits(Index + 1,true))
+                if (LoadSplits(Index,true))
                 {
                     DoReset = false;
                     Timer.Reset();
