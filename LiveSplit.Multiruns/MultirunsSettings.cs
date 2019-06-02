@@ -61,8 +61,14 @@ namespace LiveSplit.Multiruns
                 c.SuspendLayout();
             }
 
-            if (i >= Count || Count <= 1)
+            if (i >= Count)
             {
+                return false;
+            }
+
+            if (Count <= 1)
+            {
+                MessageBox.Show(TopLevelControl,"You can't remove the last splits file.", "Livesplit",MessageBoxButtons.OK,MessageBoxIcon.Error);
                 return false;
             }
 
