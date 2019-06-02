@@ -104,9 +104,10 @@ namespace LiveSplit.Multiruns
         {
             if (State.CurrentPhase == TimerPhase.Ended && Settings.On)
             {
+                Index++;
+
                 if (LoadSplits(Index + 1,true))
                 {
-                    Index++;
                     DoReset = false;
                     Timer.Reset();
                     DoReset = true;
@@ -119,18 +120,50 @@ namespace LiveSplit.Multiruns
                         Timer.Pause();
                     }
                 }
+
+                else
+                {
+                    TimerUpdate();
+                    PendingRuns.Add(State.Run);
+                    State.Run = FinalRun();
+                }
             }
+        }
+
+        private IRun FinalRun()
+        {
+            Run run = new Run(new StandardComparisonGeneratorsFactory())
+            {
+                GameName = Settings.Game,
+                CategoryName = Settings.Category
+            };
+
+            var timeOffset = new Time(new TimeSpan(), new TimeSpan());
+            foreach (IRun prun in PendingRuns)
+            {
+                foreach (ISegment iseg in prun)
+                {
+                    run.AddSegment(
+                        "-" + iseg.Name,
+                        iseg.PersonalBestSplitTime + timeOffset,
+                        iseg.BestSegmentTime + timeOffset,
+                        iseg.Icon,
+                        iseg.SplitTime + timeOffset
+                        );
+                }
+                run.AddSegment(prun.GameName, default(Time), default(Time), null, prun.Last().SplitTime + timeOffset);
+                timeOffset += prun.Last().SplitTime;
+            }
+            return run;
         }
 
         public bool LoadSplits(int i, bool saveRun = false)
         {
-            var compgenfact = new StandardComparisonGeneratorsFactory();
             try
             {
-
                 if (string.IsNullOrEmpty(Settings[i]))
                 {
-                    var run = new Run(compgenfact)
+                    var run = new Run(new StandardComparisonGeneratorsFactory())
                     {
                         GameName = "",
                         CategoryName = ""
@@ -148,7 +181,7 @@ namespace LiveSplit.Multiruns
                 {
                     IRun run;
                     var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
-                    run = runfact.Create(compgenfact);
+                    run = runfact.Create(new StandardComparisonGeneratorsFactory());
 
                     if (saveRun)
                     {
@@ -182,6 +215,8 @@ namespace LiveSplit.Multiruns
             elem.AppendChild(SettingsHelper.ToElement(document, "Version", Assembly.GetExecutingAssembly().GetName().Version.ToString(3)));
             elem.AppendChild(SettingsHelper.ToElement(document,"Enabled",Settings.On));
             elem.AppendChild(SettingsHelper.ToElement(document, "Autostart", Settings.Autostart));
+            elem.AppendChild(SettingsHelper.ToElement(document, "Game", Settings.Game));
+            elem.AppendChild(SettingsHelper.ToElement(document, "Category", Settings.Category));
             var splitsElem = elem.AppendChild(document.CreateElement("Splits"));
 
             for (int i = 0; i < Settings.Count; i++)
@@ -202,6 +237,8 @@ namespace LiveSplit.Multiruns
             var elem = (XmlElement) settings;
             Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
             Settings.Autostart = SettingsHelper.ParseBool(elem["Autostart"], true);
+            Settings.Game = SettingsHelper.ParseString(elem["Game"], string.Empty);
+            Settings.Category = SettingsHelper.ParseString(elem["Category"], string.Empty);
             var splitsElem = elem["Splits"];
 
             if (splitsElem != null)

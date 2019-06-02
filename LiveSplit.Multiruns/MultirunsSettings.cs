@@ -22,13 +22,15 @@ namespace LiveSplit.Multiruns
             set {
                 if (value && !On)
                 {
-                    Comp.LoadSplits(0,false);
+                    Comp.LoadSplits(0, false);
                 }
 
                 On_private = value;
             }
         }
         public bool Autostart { get; set; }
+        public string Game { get; set; }
+        public string Category { get; set; }
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
         private List<Control> Suspendibles;
@@ -47,6 +49,8 @@ namespace LiveSplit.Multiruns
 
             chkEnable.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(On), false, DataSourceUpdateMode.OnPropertyChanged);
             chkAutostart.DataBindings.Add(nameof(CheckBox.Checked), this, nameof(Autostart), false, DataSourceUpdateMode.OnPropertyChanged);
+            tbGame.DataBindings.Add(nameof(TextBox.Text), this, nameof(Game), false, DataSourceUpdateMode.OnValidation);
+            tbCategory.DataBindings.Add(nameof(TextBox.Text), this, nameof(Game), false, DataSourceUpdateMode.OnValidation);
             ofdSplitsFile.FileOk += DiaSplitsFile_FileOk;
             btnAdd.Click += (dingus,bingus) => Add();
             Add();

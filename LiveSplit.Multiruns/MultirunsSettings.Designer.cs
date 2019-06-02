@@ -29,6 +29,9 @@
         private void InitializeComponent()
         {
             System.Windows.Forms.Panel panel1;
+            System.Windows.Forms.GroupBox gbRunInfo;
+            System.Windows.Forms.Label label1;
+            System.Windows.Forms.Label label2;
             this.chkAutostart = new System.Windows.Forms.CheckBox();
             this.gbSplits = new System.Windows.Forms.GroupBox();
             this.flpSplits = new System.Windows.Forms.FlowLayoutPanel();
@@ -36,13 +39,20 @@
             this.chkEnable = new System.Windows.Forms.CheckBox();
             this.ofdSplitsFile = new System.Windows.Forms.OpenFileDialog();
             this.sfdSplitsFile = new System.Windows.Forms.SaveFileDialog();
+            this.tbGame = new System.Windows.Forms.TextBox();
+            this.tbCategory = new System.Windows.Forms.TextBox();
             panel1 = new System.Windows.Forms.Panel();
+            gbRunInfo = new System.Windows.Forms.GroupBox();
+            label1 = new System.Windows.Forms.Label();
+            label2 = new System.Windows.Forms.Label();
             panel1.SuspendLayout();
             this.gbSplits.SuspendLayout();
+            gbRunInfo.SuspendLayout();
             this.SuspendLayout();
             // 
             // panel1
             // 
+            panel1.Controls.Add(gbRunInfo);
             panel1.Controls.Add(this.chkAutostart);
             panel1.Controls.Add(this.gbSplits);
             panel1.Controls.Add(this.chkEnable);
@@ -50,7 +60,7 @@
             panel1.Location = new System.Drawing.Point(0, 0);
             panel1.Name = "panel1";
             panel1.Padding = new System.Windows.Forms.Padding(3);
-            panel1.Size = new System.Drawing.Size(476, 300);
+            panel1.Size = new System.Drawing.Size(476, 398);
             panel1.TabIndex = 1;
             // 
             // chkAutostart
@@ -69,7 +79,7 @@
             // 
             this.gbSplits.Controls.Add(this.flpSplits);
             this.gbSplits.Controls.Add(this.btnAdd);
-            this.gbSplits.Location = new System.Drawing.Point(6, 52);
+            this.gbSplits.Location = new System.Drawing.Point(6, 142);
             this.gbSplits.Name = "gbSplits";
             this.gbSplits.Size = new System.Drawing.Size(464, 242);
             this.gbSplits.TabIndex = 4;
@@ -113,16 +123,66 @@
             // 
             this.sfdSplitsFile.AddExtension = false;
             // 
+            // gbRunInfo
+            // 
+            gbRunInfo.AutoSize = true;
+            gbRunInfo.AutoSizeMode = System.Windows.Forms.AutoSizeMode.GrowAndShrink;
+            gbRunInfo.Controls.Add(this.tbCategory);
+            gbRunInfo.Controls.Add(label2);
+            gbRunInfo.Controls.Add(this.tbGame);
+            gbRunInfo.Controls.Add(label1);
+            gbRunInfo.Location = new System.Drawing.Point(6, 52);
+            gbRunInfo.MinimumSize = new System.Drawing.Size(464, 0);
+            gbRunInfo.Name = "gbRunInfo";
+            gbRunInfo.Size = new System.Drawing.Size(464, 84);
+            gbRunInfo.TabIndex = 6;
+            gbRunInfo.TabStop = false;
+            gbRunInfo.Text = "Run Info";
+            // 
+            // label1
+            // 
+            label1.AutoSize = true;
+            label1.Location = new System.Drawing.Point(6, 22);
+            label1.Name = "label1";
+            label1.Size = new System.Drawing.Size(35, 13);
+            label1.TabIndex = 0;
+            label1.Text = "Game";
+            // 
+            // tbGame
+            // 
+            this.tbGame.Location = new System.Drawing.Point(61, 19);
+            this.tbGame.Name = "tbGame";
+            this.tbGame.Size = new System.Drawing.Size(200, 20);
+            this.tbGame.TabIndex = 0;
+            // 
+            // label2
+            // 
+            label2.AutoSize = true;
+            label2.Location = new System.Drawing.Point(6, 48);
+            label2.Name = "label2";
+            label2.Size = new System.Drawing.Size(49, 13);
+            label2.TabIndex = 8;
+            label2.Text = "Category";
+            // 
+            // tbCategory
+            // 
+            this.tbCategory.Location = new System.Drawing.Point(61, 45);
+            this.tbCategory.Name = "tbCategory";
+            this.tbCategory.Size = new System.Drawing.Size(200, 20);
+            this.tbCategory.TabIndex = 1;
+            // 
             // MultirunsSettings
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
             this.Controls.Add(panel1);
             this.Name = "MultirunsSettings";
-            this.Size = new System.Drawing.Size(476, 300);
+            this.Size = new System.Drawing.Size(476, 398);
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             this.gbSplits.ResumeLayout(false);
+            gbRunInfo.ResumeLayout(false);
+            gbRunInfo.PerformLayout();
             this.ResumeLayout(false);
 
         }
@@ -136,5 +196,7 @@
         private System.Windows.Forms.SaveFileDialog sfdSplitsFile;
         private System.Windows.Forms.Button btnAdd;
         private System.Windows.Forms.CheckBox chkAutostart;
+        private System.Windows.Forms.TextBox tbCategory;
+        private System.Windows.Forms.TextBox tbGame;
     }
 }
