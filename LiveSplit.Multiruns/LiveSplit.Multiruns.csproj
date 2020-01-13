@@ -35,6 +35,9 @@
   <PropertyGroup>
     <RunPostBuildEvent>OnBuildSuccess</RunPostBuildEvent>
   </PropertyGroup>
+  <PropertyGroup>
+    <SignAssembly>false</SignAssembly>
+  </PropertyGroup>
   <ItemGroup>
     <Reference Include="LiveSplit.Core, Version=1.0.0.0, Culture=neutral, processorArchitecture=MSIL">
       <SpecificVersion>False</SpecificVersion>
@@ -76,6 +79,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>copy $(TargetPath) E:\dambu\Documents\LiveSplit_1.7.6\Components</PostBuildEvent>
+    <PostBuildEvent>FOR /F "tokens=3" %25%25a in ('REG QUERY HKCR\LiveSplit.SplitsFile\shell\open\command') do SET lspath=%25%25a
+IF ERRORLEVEL 0 (COPY $(TargetPath) %25lspath%25\Components ) ELSE (ECHO ERROR: could not locate LiveSplit install")</PostBuildEvent>
   </PropertyGroup>
 </Project>
