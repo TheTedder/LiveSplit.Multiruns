@@ -145,10 +145,7 @@ namespace LiveSplit.Multiruns
 
         public void TimerUpdate()
         {
-            Timer.UpdateAttemptHistory();
-            Timer.UpdateBestSegments();
-            Timer.UpdatePBSplits();
-            Timer.UpdateSegmentHistory();
+            Timer.UpdateTimes();
         }
 
         private void State_OnSplit(object sender, EventArgs e)
