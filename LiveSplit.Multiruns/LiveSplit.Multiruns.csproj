@@ -79,7 +79,7 @@
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <PropertyGroup>
-    <PostBuildEvent>FOR /F "tokens=3" %25%25a in ('REG QUERY HKCR\LiveSplit.SplitsFile\shell\open\command') do SET lspath=%25%25a
-IF ERRORLEVEL 0 (COPY $(TargetPath) %25lspath%25\Components ) ELSE (ECHO ERROR: could not locate LiveSplit install")</PostBuildEvent>
+    <PostBuildEvent>
+    </PostBuildEvent>
   </PropertyGroup>
 </Project>
