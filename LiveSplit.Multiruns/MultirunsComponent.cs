@@ -133,7 +133,10 @@ namespace LiveSplit.Multiruns
                         string text = "Save this " + PendingRuns[i].GameName + " run?";
                         if (MessageBox.Show(owner, text, "Livesplit", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
+                            DoReset = false;
+                            Timer.Reset();
                             State.Form.ContextMenuStrip.Items["saveSplitsMenuItem"].PerformClick();
+                            DoReset = true;
                         }
                     }
                 }
