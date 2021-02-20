@@ -143,10 +143,7 @@ namespace LiveSplit.Multiruns
             }
         }
 
-        public void TimerUpdate()
-        {
-            Timer.UpdateTimes();
-        }
+        private void TimerUpdate() => Timer.UpdateTimes();
 
         private void State_OnSplit(object sender, EventArgs e)
         {
