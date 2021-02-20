@@ -125,19 +125,15 @@ namespace LiveSplit.Multiruns
             if(PendingRuns.Count > 0)
             {
                 var owner = (IWin32Window)State.Form.TopLevelControl;
-                var runsaver = new XMLRunSaver();
                 for (int i = 0; i < PendingRuns.Count; i++)
                 {
                     if (!string.IsNullOrEmpty(Settings[i]) && i!= Index)
                     {
-                        State.Run = PendingRuns[i];
+                        SetRun(PendingRuns[i]);
                         string text = "Save this " + PendingRuns[i].GameName + " run?";
                         if (MessageBox.Show(owner, text, "Livesplit", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            using (var stream = Settings.Save(i))
-                            {
-                                runsaver.Save(PendingRuns[i], stream);
-                            }
+                            State.Form.ContextMenuStrip.Items["saveSplitsMenuItem"].PerformClick();
                         }
                     }
                 }
