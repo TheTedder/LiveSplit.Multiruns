@@ -228,8 +228,12 @@ namespace LiveSplit.Multiruns
                 else
                 {
                     IRun run;
-                    var runfact = new StandardFormatsRunFactory(Settings.Open(i), Settings[i]);
-                    run = runfact.Create(new StandardComparisonGeneratorsFactory());
+
+                    using (var stream = Settings.Open(i))
+                    {
+                        var runfact = new StandardFormatsRunFactory(stream, Settings[i]);
+                        run = runfact.Create(new StandardComparisonGeneratorsFactory());
+                    }
 
                     if (saveRun)
                     {
