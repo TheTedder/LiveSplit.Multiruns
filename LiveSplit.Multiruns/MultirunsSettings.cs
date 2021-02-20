@@ -2,10 +2,6 @@
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
-using System.Data;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -28,9 +24,58 @@ namespace LiveSplit.Multiruns
                 On_private = value;
             }
         }
-        public bool Autostart { get; set; }
-        public string Game { get; set; }
-        public string Category { get; set; }
+
+        private bool Autostart_Private;
+        public bool Autostart
+        {
+            get
+            {
+                return Autostart_Private;
+            }
+            set
+            {
+                Autostart_Private = value;
+
+                if (value != chkAutostart.Checked)
+                {
+                    chkAutostart.Checked = value;
+                }
+            }
+        }
+
+        private string Game_Private;
+        public string Game
+        {
+            get
+            {
+                return Game_Private;
+            }
+            set
+            {
+                Game_Private = value;
+
+                if (!value.Equals(tbGame.Text, StringComparison.Ordinal))
+                {
+                    tbGame.Text = value;
+                }
+            }
+        }
+
+        private string Category_Private;
+        public string Category
+        {
+            get => Category_Private;
+            set
+            {
+                Category_Private = value;
+
+                if (!value.Equals(tbCategory.Text, StringComparison.Ordinal))
+                {
+                    tbCategory.Text = value;
+                }
+            }
+        }
+
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
         private readonly Control[] Suspendables;

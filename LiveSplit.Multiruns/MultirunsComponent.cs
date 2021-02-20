@@ -3,11 +3,8 @@ using LiveSplit.UI;
 using LiveSplit.UI.Components;
 using System;
 using System.Collections.Generic;
-using System.Diagnostics;
 using System.Linq;
 using System.Reflection;
-using System.Text;
-using System.Threading.Tasks;
 using System.Xml;
 using LiveSplit.Model.RunSavers;
 using LiveSplit.Model.RunFactories;
@@ -249,6 +246,7 @@ namespace LiveSplit.Multiruns
 
         public override void Dispose()
         {
+            Settings.Dispose();
             State.OnSplit -= State_OnSplit;
             State.OnReset -= State_OnReset;
             State.OnStart -= State_OnStart;
