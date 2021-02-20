@@ -60,31 +60,46 @@ namespace LiveSplit.Multiruns
 
         private bool RemoveAt(int i)
         {
+            bool result = false;
+
             foreach (Control c in Suspendables)
             {
                 c.SuspendLayout();
             }
 
-            if (i >= Count)
+            for (int j = 3; j < Clickables.Count; j++)
             {
-                return false;
-            }
+                if (IndexOf(Clickables[j]) == i)
+                {
+                    result = true;
 
-            //use ToArray() to avoid modifying Clickables during iteration
-            foreach(Control control in Clickables.Skip(3)?.Where(c => IndexOf(c) == i).ToArray())
-            {
-                Clickables.Remove(control);
-            }
+                    Clickables.RemoveAt(j);
 
-            foreach (Control control in flpSplits.Controls[i].Controls)
-            {
-                flpSplits.Controls[i].Controls.Clear();
-                control.Dispose();
-            }
+                    foreach (Control control in flpSplits.Controls[i].Controls)
+                    {
+                        flpSplits.Controls[i].Controls.Clear();
+                        control.Dispose();
+                    }
 
-            Control panel = flpSplits.Controls[i];
-            flpSplits.Controls.RemoveAt(i);
-            panel.Dispose();
+                    Control panel = flpSplits.Controls[i];
+                    flpSplits.Controls.RemoveAt(i);
+                    panel.Dispose();
+
+                    if (i == 0)
+                    {
+                        Comp.LoadSplits(0);
+                        flpSplits.Controls[0].Controls["tbSplitsFile"].TextChanged += Tb0_TextChanged;
+                    }
+
+                    if (Count == 1)
+                    {
+                        flpSplits.Controls[0].Controls["btnRemove"].Enabled = false;
+                        Clickables.Remove(flpSplits.Controls[0].Controls["btnRemove"]);
+                    }
+
+                    break;
+                }
+            }
 
             foreach (Control c in Suspendables)
             {
@@ -92,19 +107,7 @@ namespace LiveSplit.Multiruns
             }
             gbSplits.PerformLayout();
 
-            if (i == 0)
-            {
-                Comp.LoadSplits(0);
-                flpSplits.Controls[0].Controls["tbSplitsFile"].TextChanged += Tb0_TextChanged;
-            }
-
-            if(Count == 1)
-            {
-                flpSplits.Controls[0].Controls["btnRemove"].Enabled = false;
-                Clickables.Remove(flpSplits.Controls[0].Controls["btnRemove"]);
-            }
-
-            return true;
+            return result;
         }
 
         private int IndexOf(Control control) => flpSplits.Controls.IndexOf(control.Parent);
