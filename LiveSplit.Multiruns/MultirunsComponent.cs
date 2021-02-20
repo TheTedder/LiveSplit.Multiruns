@@ -53,7 +53,8 @@ namespace LiveSplit.Multiruns
                         if (i != Index)
                         {
                             var compgentfact = new StandardComparisonGeneratorsFactory();
-                            var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
+                            //var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
+                            var runfact = new StandardFormatsRunFactory(Settings.Open(i), Settings[i]);
                             run = runfact.Create(compgentfact);
                         }
                         else
@@ -145,10 +146,7 @@ namespace LiveSplit.Multiruns
 
         public void TimerUpdate()
         {
-            Timer.UpdateAttemptHistory();
-            Timer.UpdateBestSegments();
-            Timer.UpdatePBSplits();
-            Timer.UpdateSegmentHistory();
+            Timer.UpdateTimes();
         }
 
         private void State_OnSplit(object sender, EventArgs e)
@@ -231,7 +229,7 @@ namespace LiveSplit.Multiruns
                 else
                 {
                     IRun run;
-                    var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
+                    var runfact = new StandardFormatsRunFactory(Settings.Open(i), Settings[i]);
                     run = runfact.Create(new StandardComparisonGeneratorsFactory());
 
                     if (saveRun)
