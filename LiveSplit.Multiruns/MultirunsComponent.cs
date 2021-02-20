@@ -1,4 +1,5 @@
 ﻿using LiveSplit.Model;
+using LiveSplit.View;
 using LiveSplit.UI;
 using LiveSplit.UI.Components;
 using System;
