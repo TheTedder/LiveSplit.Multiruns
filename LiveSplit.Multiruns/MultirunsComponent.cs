@@ -50,8 +50,11 @@ namespace LiveSplit.Multiruns
                         if (i != Index)
                         {
                             var compgentfact = new StandardComparisonGeneratorsFactory();
-                            var runfact = new StandardFormatsRunFactory(Settings.Open(i), Settings[i]);
-                            run = runfact.Create(compgentfact);
+                            using (var stream = Settings.Open(i))
+                            {
+                                var runfact = new StandardFormatsRunFactory(stream, Settings[i]);
+                                run = runfact.Create(compgentfact);
+                            }
                         }
                         else
                         {
@@ -133,7 +136,10 @@ namespace LiveSplit.Multiruns
                         string text = "Save this " + PendingRuns[i].GameName + " run?";
                         if (MessageBox.Show(owner, text, "Livesplit", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            runsaver.Save(PendingRuns[i], Settings.Save(i));
+                            using (var stream = Settings.Save(i))
+                            {
+                                runsaver.Save(PendingRuns[i], stream);
+                            }
                         }
                     }
                 }
@@ -222,8 +228,12 @@ namespace LiveSplit.Multiruns
                 else
                 {
                     IRun run;
-                    var runfact = new StandardFormatsRunFactory(Settings.Open(i), Settings[i]);
-                    run = runfact.Create(new StandardComparisonGeneratorsFactory());
+
+                    using (var stream = Settings.Open(i))
+                    {
+                        var runfact = new StandardFormatsRunFactory(stream, Settings[i]);
+                        run = runfact.Create(new StandardComparisonGeneratorsFactory());
+                    }
 
                     if (saveRun)
                     {
@@ -246,10 +256,10 @@ namespace LiveSplit.Multiruns
 
         public override void Dispose()
         {
-            Settings.Dispose();
             State.OnSplit -= State_OnSplit;
             State.OnReset -= State_OnReset;
             State.OnStart -= State_OnStart;
+            Settings.Dispose();
         }
 
         public override XmlNode GetSettings(XmlDocument document)
