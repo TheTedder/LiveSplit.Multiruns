@@ -331,7 +331,7 @@ namespace LiveSplit.Multiruns
 
         public override void SetSettings(XmlNode settings)
         {
-            var elem = (XmlElement) settings;
+            var elem = (XmlElement)settings;
             Settings.On = SettingsHelper.ParseBool(elem["Enabled"], false);
             Settings.Autostart = SettingsHelper.ParseBool(elem["Autostart"], true);
             Settings.Game = SettingsHelper.ParseString(elem["Game"], string.Empty);
