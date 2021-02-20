@@ -167,7 +167,7 @@ namespace LiveSplit.Multiruns
                 {
                     TimerUpdate();
                     PendingRuns.Add(State.Run);
-                    State.Run = FinalRun();
+                    SetRun(FinalRun());
                 }
             }
         }
