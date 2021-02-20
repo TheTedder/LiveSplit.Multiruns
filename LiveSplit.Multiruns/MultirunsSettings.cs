@@ -296,14 +296,14 @@ namespace LiveSplit.Multiruns
             }
         }
 
-        public Stream Open(int i)
+        internal Stream Open(int i)
         {
 
             ofdSplitsFile.FileName = this[i];
             return ofdSplitsFile.OpenFile();
         }
 
-        public Stream Save(int i)
+        internal Stream Save(int i)
         {
             sfdSplitsFile.FileName = this[i];
             return sfdSplitsFile.OpenFile();

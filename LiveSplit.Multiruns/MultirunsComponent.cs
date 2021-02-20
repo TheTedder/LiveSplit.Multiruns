@@ -24,7 +24,7 @@ namespace LiveSplit.Multiruns
 
         private readonly List<IRun> PendingRuns;
 
-        public MultirunsComponent(LiveSplitState s)
+        internal MultirunsComponent(LiveSplitState s)
         {
             PendingRuns = new List<IRun>();
             State = s;
@@ -122,7 +122,7 @@ namespace LiveSplit.Multiruns
             }
         }
 
-        public void SaveRuns()
+        internal void SaveRuns()
         {
             if(PendingRuns.Count > 0)
             {
