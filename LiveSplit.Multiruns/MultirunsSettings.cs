@@ -56,7 +56,7 @@ namespace LiveSplit.Multiruns
             {
                 Game_Private = value;
 
-                if (value.Equals(tbGame.Text, StringComparison.Ordinal))
+                if (!value.Equals(tbGame.Text, StringComparison.Ordinal))
                 {
                     tbGame.Text = value;
                 }
