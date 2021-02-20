@@ -108,6 +108,8 @@ namespace LiveSplit.Multiruns
 
                 SetButtons(true);
             }
+
+            DoReset = true;
         }
 
         private void SetButtons(bool v)
@@ -134,7 +136,6 @@ namespace LiveSplit.Multiruns
                             DoReset = false;
                             Timer.Reset();
                             State.Form.ContextMenuStrip.Items["saveSplitsMenuItem"].PerformClick();
-                            DoReset = true;
                         }
                     }
                 }
@@ -153,7 +154,6 @@ namespace LiveSplit.Multiruns
                 {
                     DoReset = false;
                     Timer.Reset();
-                    DoReset = true;
                     Timer.Start();
 
                     if (!Settings.Autostart)
