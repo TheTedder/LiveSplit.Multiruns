@@ -252,10 +252,10 @@ namespace LiveSplit.Multiruns
 
         public override void Dispose()
         {
-            Settings.Dispose();
             State.OnSplit -= State_OnSplit;
             State.OnReset -= State_OnReset;
             State.OnStart -= State_OnStart;
+            Settings.Dispose();
         }
 
         public override XmlNode GetSettings(XmlDocument document)
