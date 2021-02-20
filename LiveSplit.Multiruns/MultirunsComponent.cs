@@ -53,7 +53,6 @@ namespace LiveSplit.Multiruns
                         if (i != Index)
                         {
                             var compgentfact = new StandardComparisonGeneratorsFactory();
-                            //var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
                             var runfact = new StandardFormatsRunFactory(Settings.Open(i), Settings[i]);
                             run = runfact.Create(compgentfact);
                         }
