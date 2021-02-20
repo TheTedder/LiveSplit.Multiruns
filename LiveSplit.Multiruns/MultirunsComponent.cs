@@ -136,7 +136,10 @@ namespace LiveSplit.Multiruns
                         string text = "Save this " + PendingRuns[i].GameName + " run?";
                         if (MessageBox.Show(owner, text, "Livesplit", MessageBoxButtons.YesNo) == DialogResult.Yes)
                         {
-                            runsaver.Save(PendingRuns[i], Settings.Save(i));
+                            using (var stream = Settings.Save(i))
+                            {
+                                runsaver.Save(PendingRuns[i], stream);
+                            }
                         }
                     }
                 }
