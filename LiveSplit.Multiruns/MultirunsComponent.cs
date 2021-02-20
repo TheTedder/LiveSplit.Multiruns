@@ -25,7 +25,7 @@ namespace LiveSplit.Multiruns
         private bool DoReset = true;
         private bool DoStart = true;
 
-        private List<IRun> PendingRuns;
+        private readonly List<IRun> PendingRuns;
 
         public MultirunsComponent(LiveSplitState s)
         {
