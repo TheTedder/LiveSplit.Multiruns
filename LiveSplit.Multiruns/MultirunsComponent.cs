@@ -77,17 +77,13 @@ namespace LiveSplit.Multiruns
                         "Warning: one or more of the files specified uses subsplits.\n" +
                         "This may cause unexpected behavior.",
                         "Livesplit",
-                        MessageBoxButtons.AbortRetryIgnore,
+                        MessageBoxButtons.OKCancel,
                         MessageBoxIcon.Error))
                     {
-                        case DialogResult.Abort:
+                        case DialogResult.Cancel:
                             Timer.Reset();
                             break;
-                        case DialogResult.Retry:
-                            Timer.Reset();
-                            Timer.Start();
-                            break;
-                        case DialogResult.Ignore:
+                        case DialogResult.OK:
                             Timer.UndoAllPauses();
                             break;
                     }
