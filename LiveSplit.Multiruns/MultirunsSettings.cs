@@ -28,7 +28,23 @@ namespace LiveSplit.Multiruns
                 On_private = value;
             }
         }
-        public bool Autostart { get; set; }
+        private bool Autostart_Private;
+        public bool Autostart
+        {
+            get
+            {
+                return Autostart_Private;
+            }
+            set
+            {
+                Autostart_Private = value;
+
+                if (value != chkAutostart.Checked)
+                {
+                    chkAutostart.Checked = value;
+                }
+            }
+        }
         public string Game { get; set; }
         public string Category { get; set; }
         private readonly MultirunsComponent Comp;
