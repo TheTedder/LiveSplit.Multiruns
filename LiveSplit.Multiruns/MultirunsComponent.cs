@@ -19,7 +19,7 @@ namespace LiveSplit.Multiruns
     public class MultirunsComponent : LogicComponent
     {
         private readonly MultirunsSettings Settings;
-        public readonly LiveSplitState State;
+        private readonly LiveSplitState State;
         private readonly TimerModel Timer;
         public int Index { get; private set; } = 0;
         private bool DoReset = true;
