@@ -63,7 +63,21 @@ namespace LiveSplit.Multiruns
             }
         }
 
-        public string Category { get; set; }
+        private string Category_Private;
+        public string Category
+        {
+            get => Category_Private;
+            set
+            {
+                Category_Private = value;
+
+                if (!value.Equals(tbCategory.Text, StringComparison.Ordinal))
+                {
+                    tbCategory.Text = value;
+                }
+            }
+        }
+
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
         private readonly Control[] Suspendables;
