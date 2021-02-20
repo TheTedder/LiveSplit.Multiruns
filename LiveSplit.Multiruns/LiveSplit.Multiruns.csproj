@@ -44,9 +44,6 @@
       <HintPath>lib\LiveSplit.Core.dll</HintPath>
       <Private>False</Private>
     </Reference>
-    <Reference Include="LiveSplit.View">
-      <HintPath>lib\LiveSplit.View.dll</HintPath>
-    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Drawing" />
