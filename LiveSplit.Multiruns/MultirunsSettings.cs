@@ -33,7 +33,7 @@ namespace LiveSplit.Multiruns
         public string Category { get; set; }
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
-        private List<Control> Suspendibles;
+        private List<Control> Suspendables;
         private int row;
         public int Count => flpSplits.Controls.Count;
 
@@ -41,7 +41,7 @@ namespace LiveSplit.Multiruns
         {
             InitializeComponent();
             Clickables = new List<Control>() { chkEnable, btnAdd, chkAutostart };
-            Suspendibles = new List<Control>(3)
+            Suspendables = new List<Control>(3)
             {
                 gbSplits, this
             };
@@ -60,7 +60,7 @@ namespace LiveSplit.Multiruns
 
         private bool RemoveAt(int i)
         {
-            foreach (Control c in Suspendibles)
+            foreach (Control c in Suspendables)
             {
                 c.SuspendLayout();
             }
@@ -86,7 +86,7 @@ namespace LiveSplit.Multiruns
             flpSplits.Controls.RemoveAt(i);
             panel.Dispose();
 
-            foreach (Control c in Suspendibles)
+            foreach (Control c in Suspendables)
             {
                 c.ResumeLayout(true);
             }
@@ -118,7 +118,7 @@ namespace LiveSplit.Multiruns
                 Clickables.Add(flpSplits.Controls[0].Controls["btnRemove"]);
             }
 
-            foreach (Control c in Suspendibles)
+            foreach (Control c in Suspendables)
             {
                 c.SuspendLayout();
             }
@@ -196,7 +196,7 @@ namespace LiveSplit.Multiruns
             p.PerformLayout();
             flpSplits.Controls.Add(p);
 
-            foreach (Control c in Suspendibles)
+            foreach (Control c in Suspendables)
             {
                 c.ResumeLayout(true);
             }
