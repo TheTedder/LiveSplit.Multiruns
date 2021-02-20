@@ -200,7 +200,7 @@ namespace LiveSplit.Multiruns
                         iseg.SplitTime + timeOffset
                         );
                 }
-                run.AddSegment(prun.GameName, default(Time), default(Time), null, prun.Last().SplitTime + timeOffset);
+                run.AddSegment(prun.GameName, default, default, null, prun.Last().SplitTime + timeOffset);
                 timeOffset += prun.Last().SplitTime;
             }
             return run;
