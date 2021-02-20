@@ -122,7 +122,7 @@ namespace LiveSplit.Multiruns
             }
         }
 
-        public void SaveRuns()
+        internal void SaveRuns()
         {
             if(PendingRuns.Count > 0)
             {
