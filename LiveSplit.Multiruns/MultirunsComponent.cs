@@ -19,7 +19,7 @@ namespace LiveSplit.Multiruns
     public class MultirunsComponent : LogicComponent
     {
         private readonly MultirunsSettings Settings;
-        private readonly LiveSplitState State;
+        private LiveSplitState State;
         private readonly TimerModel Timer;
         public int Index { get; private set; } = 0;
         private bool DoReset = true;
@@ -309,7 +309,7 @@ namespace LiveSplit.Multiruns
 
         public override void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
-
+            State = state;
         }
     }
 }
