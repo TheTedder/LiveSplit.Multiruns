@@ -198,6 +198,64 @@ namespace LiveSplit.Multiruns
             }
             return run;
         }
+        
+        //jacked from LiveSplit (TimerForm::SetRun)
+        private void SetRun(IRun run)
+        {
+            foreach (Image icon in State.Run.Select(x => x.Icon).Except(run.Select(x => x.Icon)))
+            {
+                icon?.Dispose();
+            }
+
+            if (State.Run.GameIcon != null && State.Run.GameIcon != run.GameIcon)
+            {
+                State.Run.GameIcon.Dispose();
+            }
+
+            run.ComparisonGenerators = new List<IComparisonGenerator>(State.Run.ComparisonGenerators);
+
+            foreach (var generator in run.ComparisonGenerators)
+            {
+                generator.Run = run;
+            }
+
+            run.FixSplits();
+
+            if (State.Run.AutoSplitter != null)
+            {
+                State.Run.AutoSplitter.Deactivate();
+            }
+
+            State.Run = run;
+
+            if (State != null && State.Run != null)
+            {
+                foreach (var generator in State.Run.ComparisonGenerators)
+                {
+                    generator.Generate(State.Settings);
+                }
+            }
+
+            var name = State.CurrentComparison;
+            if (!State.Run.Comparisons.Contains(name))
+            {
+                name = Run.PersonalBestComparisonName;
+            }
+            State.CurrentComparison = name;
+
+            var splitter = AutoSplitterFactory.Instance.Create(State.Run.GameName);
+            State.Run.AutoSplitter = splitter;
+            if (splitter != null && State.Settings.ActiveAutoSplitters.Contains(State.Run.GameName))
+            {
+                splitter.Activate(State);
+                if (splitter.IsActivated
+                && State.Run.AutoSplitterSettings != null
+                && State.Run.AutoSplitterSettings.GetAttribute("gameName") == State.Run.GameName)
+                    State.Run.AutoSplitter.Component.SetSettings(State.Run.AutoSplitterSettings);
+            }
+
+            State.CallRunManuallyModified();
+        }
 
         internal bool LoadSplits(int i, bool saveRun = false)
         {
@@ -229,63 +287,7 @@ namespace LiveSplit.Multiruns
                     PendingRuns.Add(State.Run);
                 }
 
-                // This code is taken straight from LiveSplit itself (TimerForm::SetRun)
-                foreach (Image icon in State.Run.Select(x => x.Icon).Except(run.Select(x => x.Icon)))
-                {
-                    if (icon != null)
-                    {
-                        icon.Dispose();
-                    }
-                }
-
-                if (State.Run.GameIcon != null && State.Run.GameIcon != run.GameIcon)
-                {
-                    State.Run.GameIcon.Dispose();
-                }
-
-                run.ComparisonGenerators = new List<IComparisonGenerator>(State.Run.ComparisonGenerators);
-
-                foreach (var generator in run.ComparisonGenerators)
-                {
-                    generator.Run = run;
-                }
-
-                run.FixSplits();
-
-                if (State.Run.AutoSplitter != null)
-                {
-                    State.Run.AutoSplitter.Deactivate();
-                }
-
-                State.Run = run;
-
-                if (State != null && State.Run != null)
-                {
-                    foreach (var generator in State.Run.ComparisonGenerators)
-                    {
-                        generator.Generate(State.Settings);
-                    }
-                }
-
-                var name = State.CurrentComparison;
-                if (!State.Run.Comparisons.Contains(name))
-                {
-                    name = Run.PersonalBestComparisonName;
-                }
-                State.CurrentComparison = name;
-
-                var splitter = AutoSplitterFactory.Instance.Create(State.Run.GameName);
-                State.Run.AutoSplitter = splitter;
-                if (splitter != null && State.Settings.ActiveAutoSplitters.Contains(State.Run.GameName))
-                {
-                    splitter.Activate(State);
-                    if (splitter.IsActivated
-                    && State.Run.AutoSplitterSettings != null
-                    && State.Run.AutoSplitterSettings.GetAttribute("gameName") == State.Run.GameName)
-                        State.Run.AutoSplitter.Component.SetSettings(State.Run.AutoSplitterSettings);
-                }
-
-                State.CallRunManuallyModified();
+                SetRun(run);
                 return true;
             }
             catch (ArgumentOutOfRangeException)
