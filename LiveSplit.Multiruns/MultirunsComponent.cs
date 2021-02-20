@@ -61,7 +61,7 @@ namespace LiveSplit.Multiruns
                             run = State.Run;
                         }
 
-                        if (run.Count(iseg => iseg.Name[0] == '-') > 0)
+                        if (run.Any(iseg => iseg.Name.StartsWith("-", StringComparison.InvariantCulture)))
                         {
                             hasSubsplits = true;
                         }
