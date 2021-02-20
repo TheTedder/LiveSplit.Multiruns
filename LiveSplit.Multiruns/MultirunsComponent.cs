@@ -19,13 +19,13 @@ namespace LiveSplit.Multiruns
     public class MultirunsComponent : LogicComponent
     {
         private readonly MultirunsSettings Settings;
-        public readonly LiveSplitState State;
+        private LiveSplitState State;
         private readonly TimerModel Timer;
         public int Index { get; private set; } = 0;
         private bool DoReset = true;
         private bool DoStart = true;
 
-        private List<IRun> PendingRuns;
+        private readonly List<IRun> PendingRuns;
 
         public MultirunsComponent(LiveSplitState s)
         {
@@ -53,7 +53,6 @@ namespace LiveSplit.Multiruns
                         if (i != Index)
                         {
                             var compgentfact = new StandardComparisonGeneratorsFactory();
-                            //var runfact = new XMLRunFactory(Settings.Open(i), Settings[i]);
                             var runfact = new StandardFormatsRunFactory(Settings.Open(i), Settings[i]);
                             run = runfact.Create(compgentfact);
                         }
@@ -144,10 +143,7 @@ namespace LiveSplit.Multiruns
             }
         }
 
-        public void TimerUpdate()
-        {
-            Timer.UpdateTimes();
-        }
+        private void TimerUpdate() => Timer.UpdateTimes();
 
         private void State_OnSplit(object sender, EventArgs e)
         {
@@ -200,13 +196,13 @@ namespace LiveSplit.Multiruns
                         iseg.SplitTime + timeOffset
                         );
                 }
-                run.AddSegment(prun.GameName, default(Time), default(Time), null, prun.Last().SplitTime + timeOffset);
+                run.AddSegment(prun.GameName, default, default, null, prun.Last().SplitTime + timeOffset);
                 timeOffset += prun.Last().SplitTime;
             }
             return run;
         }
 
-        public bool LoadSplits(int i, bool saveRun = false)
+        internal bool LoadSplits(int i, bool saveRun = false)
         {
             try
             {
@@ -309,7 +305,7 @@ namespace LiveSplit.Multiruns
 
         public override void Update(IInvalidator invalidator, LiveSplitState state, float width, float height, LayoutMode mode)
         {
-
+            State = state;
         }
     }
 }

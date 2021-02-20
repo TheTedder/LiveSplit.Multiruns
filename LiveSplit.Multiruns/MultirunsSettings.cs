@@ -33,15 +33,15 @@ namespace LiveSplit.Multiruns
         public string Category { get; set; }
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
-        private List<Control> Suspendibles;
+        private readonly Control[] Suspendables;
         private int row;
         public int Count => flpSplits.Controls.Count;
 
-        public MultirunsSettings(MultirunsComponent mc)
+        internal MultirunsSettings(MultirunsComponent mc)
         {
             InitializeComponent();
             Clickables = new List<Control>() { chkEnable, btnAdd, chkAutostart };
-            Suspendibles = new List<Control>(3)
+            Suspendables = new Control[]
             {
                 gbSplits, this
             };
@@ -60,51 +60,54 @@ namespace LiveSplit.Multiruns
 
         private bool RemoveAt(int i)
         {
-            foreach (Control c in Suspendibles)
+            bool result = false;
+
+            foreach (Control c in Suspendables)
             {
                 c.SuspendLayout();
             }
 
-            if (i >= Count)
+            for (int j = 3; j < Clickables.Count; j++)
             {
-                return false;
+                if (IndexOf(Clickables[j]) == i)
+                {
+                    result = true;
+
+                    Clickables.RemoveAt(j);
+
+                    foreach (Control control in flpSplits.Controls[i].Controls)
+                    {
+                        flpSplits.Controls[i].Controls.Clear();
+                        control.Dispose();
+                    }
+
+                    Control panel = flpSplits.Controls[i];
+                    flpSplits.Controls.RemoveAt(i);
+                    panel.Dispose();
+
+                    if (i == 0)
+                    {
+                        Comp.LoadSplits(0);
+                        flpSplits.Controls[0].Controls["tbSplitsFile"].TextChanged += Tb0_TextChanged;
+                    }
+
+                    if (Count == 1)
+                    {
+                        flpSplits.Controls[0].Controls["btnRemove"].Enabled = false;
+                        Clickables.Remove(flpSplits.Controls[0].Controls["btnRemove"]);
+                    }
+
+                    break;
+                }
             }
 
-            //use ToArray() to avoid modifying Clickables during iteration
-            foreach(Control control in Clickables.Skip(3)?.Where(c => IndexOf(c) == i).ToArray())
-            {
-                Clickables.Remove(control);
-            }
-
-            foreach (Control control in flpSplits.Controls[i].Controls)
-            {
-                flpSplits.Controls[i].Controls.Clear();
-                control.Dispose();
-            }
-
-            Control panel = flpSplits.Controls[i];
-            flpSplits.Controls.RemoveAt(i);
-            panel.Dispose();
-
-            foreach (Control c in Suspendibles)
+            foreach (Control c in Suspendables)
             {
                 c.ResumeLayout(true);
             }
             gbSplits.PerformLayout();
 
-            if (i == 0)
-            {
-                Comp.LoadSplits(0);
-                flpSplits.Controls[0].Controls["tbSplitsFile"].TextChanged += Tb0_TextChanged;
-            }
-
-            if(Count == 1)
-            {
-                flpSplits.Controls[0].Controls["btnRemove"].Enabled = false;
-                Clickables.Remove(flpSplits.Controls[0].Controls["btnRemove"]);
-            }
-
-            return true;
+            return result;
         }
 
         private int IndexOf(Control control) => flpSplits.Controls.IndexOf(control.Parent);
@@ -118,7 +121,7 @@ namespace LiveSplit.Multiruns
                 Clickables.Add(flpSplits.Controls[0].Controls["btnRemove"]);
             }
 
-            foreach (Control c in Suspendibles)
+            foreach (Control c in Suspendables)
             {
                 c.SuspendLayout();
             }
@@ -196,7 +199,7 @@ namespace LiveSplit.Multiruns
             p.PerformLayout();
             flpSplits.Controls.Add(p);
 
-            foreach (Control c in Suspendibles)
+            foreach (Control c in Suspendables)
             {
                 c.ResumeLayout(true);
             }
