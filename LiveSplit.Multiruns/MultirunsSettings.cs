@@ -37,7 +37,7 @@ namespace LiveSplit.Multiruns
         private int row;
         public int Count => flpSplits.Controls.Count;
 
-        public MultirunsSettings(MultirunsComponent mc)
+        internal MultirunsSettings(MultirunsComponent mc)
         {
             InitializeComponent();
             Clickables = new List<Control>() { chkEnable, btnAdd, chkAutostart };
