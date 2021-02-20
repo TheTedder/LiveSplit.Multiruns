@@ -21,7 +21,6 @@ namespace LiveSplit.Multiruns
         private readonly TimerModel Timer;
         public int Index { get; private set; } = 0;
         private bool DoReset = true;
-        private bool DoStart = true;
 
         private readonly List<IRun> PendingRuns;
 
@@ -39,7 +38,7 @@ namespace LiveSplit.Multiruns
 
         private void State_OnStart(object sender, EventArgs e)
         {
-            if (DoStart && Settings.On)
+            if (Index == 0 && Settings.On)
             {
                 Timer.Pause();
                 var hasSubsplits = false;
@@ -155,10 +154,8 @@ namespace LiveSplit.Multiruns
                     DoReset = false;
                     Timer.Reset();
                     DoReset = true;
-
-                    DoStart = false;
                     Timer.Start();
-                    DoStart = true;
+
                     if (!Settings.Autostart)
                     {
                         Timer.Pause();
