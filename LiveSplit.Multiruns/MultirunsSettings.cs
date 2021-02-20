@@ -46,7 +46,8 @@ namespace LiveSplit.Multiruns
         }
 
         private string Game_Private;
-        public string Game {
+        public string Game
+        {
             get
             {
                 return Game_Private;
