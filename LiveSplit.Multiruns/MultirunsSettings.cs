@@ -33,7 +33,7 @@ namespace LiveSplit.Multiruns
         public string Category { get; set; }
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
-        private List<Control> Suspendables;
+        private readonly List<Control> Suspendables;
         private int row;
         public int Count => flpSplits.Controls.Count;
 
