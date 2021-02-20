@@ -222,12 +222,7 @@ namespace LiveSplit.Multiruns
             }
 
             run.FixSplits();
-
-            if (State.Run.AutoSplitter != null)
-            {
-                State.Run.AutoSplitter.Deactivate();
-            }
-
+            State.Run.AutoSplitter?.Deactivate();
             State.Run = run;
 
             if (State != null && State.Run != null)
