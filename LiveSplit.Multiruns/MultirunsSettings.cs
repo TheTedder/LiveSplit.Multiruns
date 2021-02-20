@@ -3,9 +3,7 @@ using System.Collections.Generic;
 using System.ComponentModel;
 using System.Drawing;
 using System.Data;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 using System.IO;
 
@@ -28,6 +26,7 @@ namespace LiveSplit.Multiruns
                 On_private = value;
             }
         }
+
         private bool Autostart_Private;
         public bool Autostart
         {
@@ -45,7 +44,24 @@ namespace LiveSplit.Multiruns
                 }
             }
         }
-        public string Game { get; set; }
+
+        private string Game_Private;
+        public string Game {
+            get
+            {
+                return Game_Private;
+            }
+            set
+            {
+                Game_Private = value;
+
+                if (value.Equals(tbGame.Text, StringComparison.Ordinal))
+                {
+                    tbGame.Text = value;
+                }
+            }
+        }
+
         public string Category { get; set; }
         private readonly MultirunsComponent Comp;
         internal List<Control> Clickables;
