@@ -205,7 +205,7 @@ namespace LiveSplit.Multiruns
             return run;
         }
 
-        public bool LoadSplits(int i, bool saveRun = false)
+        internal bool LoadSplits(int i, bool saveRun = false)
         {
             try
             {
