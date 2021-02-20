@@ -10,6 +10,7 @@ using LiveSplit.Model.RunSavers;
 using LiveSplit.Model.RunFactories;
 using LiveSplit.Model.Comparisons;
 using System.Windows.Forms;
+using System.Drawing;
 
 namespace LiveSplit.Multiruns
 {
@@ -209,41 +210,89 @@ namespace LiveSplit.Multiruns
         {
             try
             {
+                IRun run;
+
                 if (string.IsNullOrEmpty(Settings[i]))
                 {
-                    var run = new Run(new StandardComparisonGeneratorsFactory())
+                    run = new Run(new StandardComparisonGeneratorsFactory())
                     {
                         GameName = "",
                         CategoryName = ""
                     };
                     run.AddSegment("");
-
-                    if (saveRun)
-                    {
-                        TimerUpdate();
-                        PendingRuns.Add(State.Run);
-                    }
-                    State.Run = run;
                 }
                 else
                 {
-                    IRun run;
-
                     using (var stream = Settings.Open(i))
                     {
                         var runfact = new StandardFormatsRunFactory(stream, Settings[i]);
                         run = runfact.Create(new StandardComparisonGeneratorsFactory());
                     }
-
-                    if (saveRun)
-                    {
-                        TimerUpdate();
-                        PendingRuns.Add(State.Run);
-                    }
-
-                    State.Run = run;
-                    State.Run.AutoSplitter = AutoSplitterFactory.Instance.Create(State.Run.GameName);
                 }
+
+                if (saveRun)
+                {
+                    TimerUpdate();
+                    PendingRuns.Add(State.Run);
+                }
+
+                // This code is taken straight from LiveSplit itself (TimerForm::SetRun)
+                foreach (Image icon in State.Run.Select(x => x.Icon).Except(run.Select(x => x.Icon)))
+                {
+                    if (icon != null)
+                    {
+                        icon.Dispose();
+                    }
+                }
+
+                if (State.Run.GameIcon != null && State.Run.GameIcon != run.GameIcon)
+                {
+                    State.Run.GameIcon.Dispose();
+                }
+
+                run.ComparisonGenerators = new List<IComparisonGenerator>(State.Run.ComparisonGenerators);
+
+                foreach (var generator in run.ComparisonGenerators)
+                {
+                    generator.Run = run;
+                }
+
+                run.FixSplits();
+
+                if (State.Run.AutoSplitter != null)
+                {
+                    State.Run.AutoSplitter.Deactivate();
+                }
+
+                State.Run = run;
+
+                if (State != null && State.Run != null)
+                {
+                    foreach (var generator in State.Run.ComparisonGenerators)
+                    {
+                        generator.Generate(State.Settings);
+                    }
+                }
+
+                var name = State.CurrentComparison;
+                if (!State.Run.Comparisons.Contains(name))
+                {
+                    name = Run.PersonalBestComparisonName;
+                }
+                State.CurrentComparison = name;
+
+                var splitter = AutoSplitterFactory.Instance.Create(State.Run.GameName);
+                State.Run.AutoSplitter = splitter;
+                if (splitter != null && State.Settings.ActiveAutoSplitters.Contains(State.Run.GameName))
+                {
+                    splitter.Activate(State);
+                    if (splitter.IsActivated
+                    && State.Run.AutoSplitterSettings != null
+                    && State.Run.AutoSplitterSettings.GetAttribute("gameName") == State.Run.GameName)
+                        State.Run.AutoSplitter.Component.SetSettings(State.Run.AutoSplitterSettings);
+                }
+
+                State.CallRunManuallyModified();
                 return true;
             }
             catch (ArgumentOutOfRangeException)
